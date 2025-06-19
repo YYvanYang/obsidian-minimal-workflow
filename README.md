@@ -20,7 +20,7 @@
 ### 一键安装
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/obsidian-minimal-workflow.git
+git clone https://github.com/YYvanYang/obsidian-minimal-workflow.git
 cd obsidian-minimal-workflow
 chmod +x scripts/setup.sh
 ./scripts/setup.sh
@@ -30,7 +30,7 @@ chmod +x scripts/setup.sh
 
 1. **下载并设置**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/obsidian-minimal-workflow.git
+   git clone https://github.com/YYvanYang/obsidian-minimal-workflow.git
    cd obsidian-minimal-workflow
    cp -r vault-template/* ./
    ```
