@@ -26,6 +26,11 @@ chmod +x scripts/setup.sh
 ./scripts/setup.sh
 ```
 
+设置脚本会提供三种选项：
+1. 在当前目录创建 Vault
+2. 选择现有目录
+3. 创建新目录
+
 ### 手动安装
 
 1. **下载并设置**

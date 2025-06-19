@@ -14,6 +14,16 @@ chmod +x scripts/setup.sh
 ./scripts/setup.sh
 ```
 
+**设置选项说明:**
+- **选项1**: 在当前目录创建 Vault (会检查目录是否为空)
+- **选项2**: 指定现有目录路径 (支持 ~ 路径)
+- **选项3**: 创建新目录 (可指定父目录位置)
+
+**推荐创建位置:**
+- `~/Documents/MyVault` - 文档目录下
+- `~/Obsidian/WorkVault` - 专门的Obsidian目录
+- `~/Desktop/Knowledge` - 桌面快速访问
+
 ### 方法2: 手动设置
 
 1. **下载项目**
