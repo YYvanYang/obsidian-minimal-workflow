@@ -6,7 +6,7 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/yourusername/obsidian-minimal-workflow.git
+git clone https://github.com/YOUR_USERNAME/obsidian-minimal-workflow.git
 cd obsidian-minimal-workflow
 
 # 运行自动化设置
@@ -18,7 +18,7 @@ chmod +x scripts/setup.sh
 
 1. **下载项目**
    ```bash
-   git clone https://github.com/yourusername/obsidian-minimal-workflow.git
+   git clone https://github.com/YOUR_USERNAME/obsidian-minimal-workflow.git
    cd obsidian-minimal-workflow
    ```
 

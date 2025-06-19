@@ -105,4 +105,4 @@
 
 ---
 
-**贡献指南**: 欢迎提交问题报告和功能建议到 [GitHub Issues](https://github.com/yourusername/obsidian-minimal-workflow/issues)
+**贡献指南**: 欢迎提交问题报告和功能建议到 [GitHub Issues](https://github.com/YOUR_USERNAME/obsidian-minimal-workflow/issues)
