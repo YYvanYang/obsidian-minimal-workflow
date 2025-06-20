@@ -191,14 +191,14 @@ if [ ! -f "10-Daily/${DATE}.md" ]; then
     cp "$PROJECT_DIR/examples/sample-daily-note.md" "10-Daily/${DATE}.md"
     # 兼容 macOS 和 Linux 的 sed 命令
     if [[ "$OSTYPE" == "darwin"* ]]; then
-        sed -i '' "s/2024-12-20/${DATE}/g" "10-Daily/${DATE}.md"
+        sed -i '' "s/2025-06-20/${DATE}/g" "10-Daily/${DATE}.md"
         sed -i '' "s/Friday/$(date +%A)/g" "10-Daily/${DATE}.md"
-        sed -i '' "s/12-20/$(date +%m-%d)/g" "10-Daily/${DATE}.md"
+        sed -i '' "s/06-20/$(date +%m-%d)/g" "10-Daily/${DATE}.md"
         sed -i '' "s/Fri/$(date +%a)/g" "10-Daily/${DATE}.md"
     else
-        sed -i "s/2024-12-20/${DATE}/g" "10-Daily/${DATE}.md"
+        sed -i "s/2025-06-20/${DATE}/g" "10-Daily/${DATE}.md"
         sed -i "s/Friday/$(date +%A)/g" "10-Daily/${DATE}.md"
-        sed -i "s/12-20/$(date +%m-%d)/g" "10-Daily/${DATE}.md"
+        sed -i "s/06-20/$(date +%m-%d)/g" "10-Daily/${DATE}.md"
         sed -i "s/Fri/$(date +%a)/g" "10-Daily/${DATE}.md"
     fi
     echo -e "${GREEN}✅ 今日笔记已创建: 10-Daily/${DATE}.md${NC}"
@@ -213,11 +213,11 @@ if [ ! -f "Weekly/${WEEK}.md" ]; then
     cp "$PROJECT_DIR/examples/sample-weekly-report.md" "Weekly/${WEEK}.md"
     # 兼容 macOS 和 Linux 的 sed 命令
     if [[ "$OSTYPE" == "darwin"* ]]; then
-        sed -i '' "s/2024-W51/${WEEK}/g" "Weekly/${WEEK}.md"
-        sed -i '' "s/第51周/第$(date +%U)周/g" "Weekly/${WEEK}.md"
+        sed -i '' "s/2025-W25/${WEEK}/g" "Weekly/${WEEK}.md"
+        sed -i '' "s/第25周/第$(date +%U)周/g" "Weekly/${WEEK}.md"
     else
-        sed -i "s/2024-W51/${WEEK}/g" "Weekly/${WEEK}.md"
-        sed -i "s/第51周/第$(date +%U)周/g" "Weekly/${WEEK}.md"
+        sed -i "s/2025-W25/${WEEK}/g" "Weekly/${WEEK}.md"
+        sed -i "s/第25周/第$(date +%U)周/g" "Weekly/${WEEK}.md"
     fi
     echo -e "${GREEN}✅ 本周周报已创建: Weekly/${WEEK}.md${NC}"
 else

@@ -57,7 +57,7 @@
 2. **验证文件的front matter**
    ```markdown
    ---
-   date: 2024-12-20
+   date: 2025-06-20
    tags: [daily]
    status: active
    ---

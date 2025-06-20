@@ -1,6 +1,6 @@
 ---
 title: Obsidian插件开发指南
-date: 2024-12-20
+date: 2025-06-15
 category: Learning
 tags: [knowledge, learning]
 source: Obsidian官方文档

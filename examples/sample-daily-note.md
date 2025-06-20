@@ -1,11 +1,11 @@
 ---
-date: 2024-12-20
+date: 2025-06-20
 day: Friday
-week: [[2024-W51]]
+week: [[2025-W25]]
 tags: [daily]
 ---
 
-# 12-20 Fri
+# 06-20 Fri
 
 ## 🎯 今日重点
 - [x] 完成obsidian-minimal-workflow项目设计

@@ -70,7 +70,7 @@ claude /daily-note
 **自定义选项**:
 ```bash
 # 创建特定日期的笔记
-claude /daily-note --date 2024-12-25
+claude /daily-note --date 2025-07-25
 
 # 使用自定义模板
 claude /daily-note --template custom-daily
