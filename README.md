@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Obsidian](https://img.shields.io/badge/Obsidian-Compatible-purple)](https://obsidian.md/)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Integrated-blue)](https://claude.ai/code)
-[![Version](https://img.shields.io/badge/Version-0.2.0-green)](https://github.com/yourusername/obsidian-minimal-workflow/releases)
+[![Version](https://img.shields.io/badge/Version-0.2.0-green)](https://github.com/YYvanYang/obsidian-minimal-workflow/releases)
 
 ## ✨ 特性亮点
 
@@ -23,7 +23,7 @@
 ### 一键安装
 
 ```bash
-git clone https://github.com/yourusername/obsidian-minimal-workflow.git
+git clone https://github.com/YYvanYang/obsidian-minimal-workflow.git
 cd obsidian-minimal-workflow
 chmod +x scripts/setup.sh
 ./scripts/setup.sh
@@ -47,7 +47,7 @@ chmod +x scripts/setup.sh
 
 1. **克隆项目**
    ```bash
-   git clone https://github.com/yourusername/obsidian-minimal-workflow.git
+   git clone https://github.com/YYvanYang/obsidian-minimal-workflow.git
    cd obsidian-minimal-workflow
    ```
 
@@ -337,7 +337,7 @@ await tp.file.rename(fileName);
 
 ## 🌟 Star 历史
 
-[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/obsidian-minimal-workflow&type=Date)](https://star-history.com/#yourusername/obsidian-minimal-workflow&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=YYvanYang/obsidian-minimal-workflow&type=Date)](https://star-history.com/#YYvanYang/obsidian-minimal-workflow&Date)
 
 ---
 
@@ -345,4 +345,4 @@ await tp.file.rename(fileName);
 
 如果这个项目对你有帮助，请给个 ⭐️ 支持一下！
 
-有问题或建议？欢迎 [提交 Issue](https://github.com/yourusername/obsidian-minimal-workflow/issues) 或加入 [Discussions](https://github.com/yourusername/obsidian-minimal-workflow/discussions)。
+有问题或建议？欢迎 [提交 Issue](https://github.com/YYvanYang/obsidian-minimal-workflow/issues) 或加入 [Discussions](https://github.com/YYvanYang/obsidian-minimal-workflow/discussions)。

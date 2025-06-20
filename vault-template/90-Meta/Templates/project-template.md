@@ -63,8 +63,8 @@ tags: [project]
 ## 📝 项目日志
 ```dataview
 LIST 
-FROM "10-Daily"
+FROM "10-Daily" AND #daily
 WHERE contains(file.content, "<% projectName %>")
-SORT file.name DESC
+SORT file.ctime DESC
 LIMIT 10
 ```

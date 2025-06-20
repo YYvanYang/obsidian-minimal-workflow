@@ -120,7 +120,7 @@
 ## 维护者
 
 - 主要维护者：[您的名字]
-- 贡献者：查看 [contributors](https://github.com/yourusername/obsidian-minimal-workflow/contributors)
+- 贡献者：查看 [contributors](https://github.com/YYvanYang/obsidian-minimal-workflow/contributors)
 
 ---
 

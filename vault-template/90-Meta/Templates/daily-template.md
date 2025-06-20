@@ -1,17 +1,24 @@
 <%*
-const fileName = tp.date.now("YYYY-MM-DD");
-await tp.file.rename(fileName);
-await tp.file.move(`10-Daily/${fileName}`);
+// 缓存日期变量以提高性能
+const dateVars = {
+    fileName: tp.date.now("YYYY-MM-DD"),
+    dayName: tp.date.now("dddd"),
+    weekName: tp.date.now("YYYY-[W]ww"),
+    shortDate: tp.date.now("MM-DD ddd")
+};
+
+await tp.file.rename(dateVars.fileName);
+await tp.file.move(`10-Daily/${dateVars.fileName}`);
 -%>
 
 ---
-date: <% tp.date.now("YYYY-MM-DD") %>
-day: <% tp.date.now("dddd") %>
-week: [[<% tp.date.now("YYYY-[W]ww") %>]]
+date: <% dateVars.fileName %>
+day: <% dateVars.dayName %>
+week: [[<% dateVars.weekName %>]]
 tags: [daily]
 ---
 
-# <% tp.date.now("MM-DD ddd") %>
+# <% dateVars.shortDate %>
 
 ## 🎯 今日重点
 - [ ] 

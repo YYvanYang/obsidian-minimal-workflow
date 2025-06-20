@@ -10,6 +10,18 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# 跨平台哈希函数
+get_file_hash() {
+    local file="$1"
+    if command -v md5sum >/dev/null 2>&1; then
+        md5sum "$file" | cut -d' ' -f1
+    elif command -v md5 >/dev/null 2>&1; then
+        md5 -q "$file"
+    else
+        echo "" # 如果没有哈希工具，返回空字符串
+    fi
+}
+
 echo -e "${BLUE}🏥 执行 Obsidian Vault 健康检查...${NC}\n"
 
 # 统计变量
@@ -165,17 +177,32 @@ echo ""
 echo -e "${BLUE}👥 检查重复文件...${NC}"
 DUPLICATES=0
 
-# 使用文件内容的 MD5 哈希值查找重复文件
-find . -name "*.md" -type f -exec md5sum {} + | sort | uniq -w32 -d --all-repeated=separate | while read -r line; do
-    if [ -n "$line" ]; then
-        hash=$(echo "$line" | awk '{print $1}')
-        file=$(echo "$line" | awk '{$1=""; print $0}' | sed 's/^ //')
+# 使用文件内容的哈希值查找重复文件
+if command -v md5sum >/dev/null 2>&1 || command -v md5 >/dev/null 2>&1; then
+    # 创建临时文件存储哈希值
+    TEMP_HASHES=$(mktemp)
+    
+    find . -name "*.md" -type f | while read -r file; do
+        hash=$(get_file_hash "$file")
         if [ -n "$hash" ]; then
-            report_issue "warning" "可能的重复文件: $file"
-            ((DUPLICATES++))
+            echo "$hash $file" >> "$TEMP_HASHES"
         fi
+    done
+    
+    # 查找重复的哈希值
+    if [ -f "$TEMP_HASHES" ]; then
+        sort "$TEMP_HASHES" | uniq -w32 -d | while read -r line; do
+            if [ -n "$line" ]; then
+                file=$(echo "$line" | awk '{$1=""; print $0}' | sed 's/^ //')
+                report_issue "warning" "可能的重复文件: $file"
+                ((DUPLICATES++))
+            fi
+        done
+        rm -f "$TEMP_HASHES"
     fi
-done
+else
+    report_issue "warning" "无法检查重复文件 - 缺少哈希工具 (md5sum 或 md5)"
+fi
 
 if [ $DUPLICATES -eq 0 ]; then
     report_issue "info" "没有发现重复文件"

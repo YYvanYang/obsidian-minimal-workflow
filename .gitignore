@@ -1,0 +1,51 @@
+# Obsidian
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.obsidian/backlink.json
+.obsidian/core-plugins.json
+.obsidian/daily-notes
+.obsidian/graph.json
+.obsidian/hotkeys.json
+.obsidian/starred.json
+.obsidian/workspace
+.obsidian/workspace.json
+
+# Personal Configuration
+.obsidian-workflow/config.json
+config.local.json
+
+# System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary Files
+*.tmp
+*.temp
+*~
+.#*
+
+# Logs
+*.log
+logs/
+
+# Backup Files
+*.bak
+*.backup
+
+# Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node modules (if any development tools are added)
+node_modules/
+
+# OS Generated
+.fuse_hidden*

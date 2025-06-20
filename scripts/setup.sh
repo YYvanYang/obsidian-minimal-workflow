@@ -10,6 +10,16 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# 安全函数：验证 Vault 名称
+validate_vault_name() {
+    local name="$1"
+    if [[ "$name" =~ [/\\:*?"<>|] ]]; then
+        echo -e "${RED}❌ 错误: Vault 名称包含非法字符${NC}"
+        echo "Vault 名称不能包含: / \\ : * ? \" < > |"
+        return 1
+    fi
+}
+
 echo -e "${BLUE}🚀 开始设置 obsidian-minimal-workflow...${NC}"
 echo ""
 
@@ -29,21 +39,21 @@ init_config() {
     if [ -f "$CONFIG_FILE" ]; then
         echo -e "${GREEN}✅ 发现现有配置文件${NC}"
         # 读取现有配置
-        GITHUB_USERNAME=$(grep -o '"github_username"[[:space:]]*:[[:space:]]*"[^"]*"' "$CONFIG_FILE" | sed 's/.*"\([^"]*\)"$/\1/')
         VAULT_NAME=$(grep -o '"vault_name"[[:space:]]*:[[:space:]]*"[^"]*"' "$CONFIG_FILE" | sed 's/.*"\([^"]*\)"$/\1/')
     else
-        # 请求用户输入配置信息
-        read -p "请输入您的 GitHub 用户名 (用于文档链接): " GITHUB_USERNAME
-        GITHUB_USERNAME=${GITHUB_USERNAME:-"yourusername"}
-        
-        read -p "请输入 Vault 名称 (默认: My Knowledge Base): " VAULT_NAME
-        VAULT_NAME=${VAULT_NAME:-"My Knowledge Base"}
+        # 请求用户输入 Vault 名称
+        while true; do
+            read -p "请输入 Vault 名称 (默认: My Knowledge Base): " VAULT_NAME
+            VAULT_NAME=${VAULT_NAME:-"My Knowledge Base"}
+            if validate_vault_name "$VAULT_NAME"; then
+                break
+            fi
+        done
         
         # 创建配置目录和文件
         mkdir -p "$(dirname "$CONFIG_FILE")"
         cat > "$CONFIG_FILE" << EOF
 {
-  "github_username": "$GITHUB_USERNAME",
   "vault_name": "$VAULT_NAME",
   "default_language": "zh-CN",
   "backup_retention_days": 30,
@@ -56,96 +66,7 @@ EOF
     fi
 }
 
-# 更新文档中的占位符
-update_placeholders() {
-    echo ""
-    echo -e "${BLUE}🔄 更新文档中的占位符...${NC}"
-    
-    # 需要更新的文件列表
-    FILES_TO_UPDATE=(
-        "README.md"
-        "SETUP.md"
-        "docs/troubleshooting.md"
-        "docs/best-practices.md"
-        "docs/claude-integration.md"
-        "CHANGELOG.md"
-    )
-    
-    for file in "${FILES_TO_UPDATE[@]}"; do
-        if [ -f "$file" ]; then
-            # 替换 GitHub 用户名
-            if [[ "$OSTYPE" == "darwin"* ]]; then
-                sed -i '' "s/YYvanYang/$GITHUB_USERNAME/g" "$file"
-                sed -i '' "s/yourusername/$GITHUB_USERNAME/g" "$file"
-                sed -i '' "s/YOUR_USERNAME/$GITHUB_USERNAME/g" "$file"
-            else
-                sed -i "s/YYvanYang/$GITHUB_USERNAME/g" "$file"
-                sed -i "s/yourusername/$GITHUB_USERNAME/g" "$file"
-                sed -i "s/YOUR_USERNAME/$GITHUB_USERNAME/g" "$file"
-            fi
-            
-            # 替换 Vault 名称
-            if [[ "$OSTYPE" == "darwin"* ]]; then
-                sed -i '' "s/My Knowledge Base/$VAULT_NAME/g" "$file" 2>/dev/null || true
-            else
-                sed -i "s/My Knowledge Base/$VAULT_NAME/g" "$file" 2>/dev/null || true
-            fi
-            
-            echo -e "  ✅ 更新 $file"
-        fi
-    done
-}
 
-# 创建 .gitignore 文件
-create_gitignore() {
-    if [ ! -f ".gitignore" ]; then
-        echo -e "${BLUE}📝 创建 .gitignore 文件...${NC}"
-        cat > .gitignore << 'EOF'
-# Obsidian
-.obsidian/workspace.json
-.obsidian/workspace-mobile.json
-.obsidian/workspaces.json
-.obsidian/cache
-.obsidian/hotkeys.json
-.obsidian/types.json
-.obsidian/app.json
-
-# 系统文件
-.DS_Store
-Thumbs.db
-.directory
-
-# 备份文件
-*.bak
-*.backup
-*.old
-*~
-
-# 临时文件
-.tmp/
-.temp/
-*.tmp
-*.temp
-
-# 个人配置
-.obsidian-workflow/config.json
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# 日志文件
-*.log
-logs/
-
-# 附件缓存
-90-Meta/Attachments/.thumbnails/
-EOF
-        echo -e "${GREEN}✅ .gitignore 已创建${NC}"
-    fi
-}
 
 # 函数：选择或创建目标目录
 choose_vault_directory() {
@@ -179,8 +100,17 @@ choose_vault_directory() {
                 exit 1
             fi
             
+            # 安全检查：防止路径遍历攻击
+            if [[ "$target_dir" =~ \.\. ]]; then
+                echo -e "${RED}❌ 错误: 路径不能包含 '..' ${NC}"
+                exit 1
+            fi
+            
             # 展开路径中的 ~ 符号
             target_dir="${target_dir/#\~/$HOME}"
+            
+            # 获取绝对路径
+            target_dir="$(realpath "$target_dir" 2>/dev/null || echo "$target_dir")"
             
             if [ ! -d "$target_dir" ]; then
                 echo -e "${RED}❌ 目录不存在: $target_dir${NC}"
@@ -205,9 +135,19 @@ choose_vault_directory() {
                 exit 1
             fi
             
+            # 验证目录名称安全性
+            if [[ "$dir_name" =~ [/\\:*?"<>|] ]] || [[ "$dir_name" =~ \.\. ]]; then
+                echo -e "${RED}❌ 错误: 目录名称包含非法字符${NC}"
+                echo "目录名称不能包含: / \\ : * ? \" < > | 和 .. "
+                exit 1
+            fi
+            
             read -p "请输入父目录路径 (默认: $HOME): " parent_dir
             parent_dir="${parent_dir:-$HOME}"
             parent_dir="${parent_dir/#\~/$HOME}"
+            
+            # 获取绝对路径
+            parent_dir="$(realpath "$parent_dir" 2>/dev/null || echo "$parent_dir")"
             
             VAULT_DIR="$parent_dir/$dir_name"
             
@@ -249,29 +189,7 @@ echo -e "${BLUE}🤖 配置 Claude Code 集成...${NC}"
 cp -r "$PROJECT_DIR/.claude" ./
 echo -e "${GREEN}✅ Claude Code 集成已配置${NC}"
 
-# 3. 复制文档文件
-echo -e "${BLUE}📚 复制文档文件...${NC}"
-cp -r "$PROJECT_DIR/docs" ./
-cp "$PROJECT_DIR/README.md" ./
-cp "$PROJECT_DIR/SETUP.md" ./
-cp "$PROJECT_DIR/CHANGELOG.md" ./
-cp "$PROJECT_DIR/LICENSE" ./
-echo -e "${GREEN}✅ 文档文件已复制${NC}"
-
-# 4. 复制脚本文件
-echo -e "${BLUE}🛠️  复制脚本文件...${NC}"
-mkdir -p scripts
-cp "$PROJECT_DIR/scripts"/*.sh ./scripts/
-chmod +x ./scripts/*.sh
-echo -e "${GREEN}✅ 脚本文件已复制${NC}"
-
-# 更新文档中的占位符
-update_placeholders
-
-# 创建 .gitignore
-create_gitignore
-
-# 5. 创建第一个每日笔记
+# 3. 创建第一个每日笔记
 echo -e "${BLUE}📝 创建今日笔记...${NC}"
 DATE=$(date +%Y-%m-%d)
 if [ ! -f "10-Daily/${DATE}.md" ]; then
@@ -293,7 +211,7 @@ else
     echo -e "${YELLOW}ℹ️  今日笔记已存在: 10-Daily/${DATE}.md${NC}"
 fi
 
-# 6. 创建本周周报
+# 4. 创建本周周报
 echo -e "${BLUE}📊 创建本周周报...${NC}"
 WEEK=$(date +%Y-W%U)
 if [ ! -f "Weekly/${WEEK}.md" ]; then
@@ -311,7 +229,7 @@ else
     echo -e "${YELLOW}ℹ️  本周周报已存在: Weekly/${WEEK}.md${NC}"
 fi
 
-# 7. 创建示例项目
+# 5. 创建示例项目
 echo -e "${BLUE}🎯 创建示例项目...${NC}"
 if [ ! -f "20-Projects/Project-示例项目.md" ]; then
     cp "$PROJECT_DIR/examples/sample-project.md" "20-Projects/Project-示例项目.md"
@@ -320,7 +238,7 @@ else
     echo -e "${YELLOW}ℹ️  示例项目已存在${NC}"
 fi
 
-# 8. 创建示例知识笔记
+# 6. 创建示例知识笔记
 echo -e "${BLUE}📚 创建示例知识笔记...${NC}"
 if [ ! -f "30-Knowledge/Learning/Lea-示例学习笔记.md" ]; then
     cp "$PROJECT_DIR/examples/sample-knowledge.md" "30-Knowledge/Learning/Lea-示例学习笔记.md"
@@ -329,12 +247,6 @@ else
     echo -e "${YELLOW}ℹ️  示例知识笔记已存在${NC}"
 fi
 
-# 9. 运行初始健康检查
-echo ""
-echo -e "${BLUE}🏥 运行初始健康检查...${NC}"
-if [ -x "./scripts/health-check.sh" ]; then
-    ./scripts/health-check.sh || true
-fi
 
 echo ""
 echo -e "${GREEN}🎉 设置完成！${NC}"
@@ -360,8 +272,8 @@ echo "   第4周: 添加知识管理和周报"
 echo "   第2个月: 使用 Claude Code 自动化"
 echo ""
 echo -e "${BLUE}📖 文档和帮助：${NC}"
-echo "- 详细文档: $VAULT_DIR/docs/"
-echo "- 快速开始: $VAULT_DIR/README.md"
-echo "- 故障排除: $VAULT_DIR/docs/troubleshooting.md"
+echo "- 项目主页: https://github.com/YYvanYang/obsidian-minimal-workflow"
+echo "- 详细文档: 项目 README.md 和 docs/ 文件夹"
+echo "- Claude Code 集成: .claude/ 文件夹"
 echo ""
 echo -e "${GREEN}祝您使用愉快！🚀${NC}"

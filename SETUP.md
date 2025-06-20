@@ -232,6 +232,6 @@ git push
 
 ## 📞 获取帮助
 
-- **问题报告**: [GitHub Issues](https://github.com/yourusername/obsidian-minimal-workflow/issues)
-- **功能建议**: [GitHub Discussions](https://github.com/yourusername/obsidian-minimal-workflow/discussions)
+- **问题报告**: [GitHub Issues](https://github.com/YYvanYang/obsidian-minimal-workflow/issues)
+- **功能建议**: [GitHub Discussions](https://github.com/YYvanYang/obsidian-minimal-workflow/discussions)
 - **文档**: `docs/` 文件夹中的详细指南
