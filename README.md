@@ -198,6 +198,7 @@ BACKUP_DIR=~/Backups RETENTION_DAYS=60 ./scripts/backup.sh
 所有模板位于 `90-Meta/Templates/`，可根据个人习惯调整：
 
 - `daily-template.md` - 每日笔记结构
+- `daily-template-fitness.md` - 带健身记录的每日模板
 - `project-template.md` - 项目管理模板  
 - `knowledge-template.md` - 知识笔记模板
 - `weekly-template.md` - 周报生成模板
@@ -226,6 +227,123 @@ custom_tag: work  # 自定义标签
 2. 统计学习笔记数量和主题分布
 3. 识别学习模式和偏好
 4. 提供个性化学习建议
+```
+
+### 🏋️ 健身打卡扩展
+
+对于有健身习惯的用户，我们提供了渐进式的健身记录扩展方案：
+
+#### 方案1: 简单打卡式
+
+在每日笔记的 `🏠 个人时间` 部分添加：
+
+```markdown
+## 🏠 个人时间
+### 🏋️ 今日运动
+- [ ] **类型**：跑步 | **时长**：30分钟 | **强度**：中等
+- **感受**：💪 精力充沛
+
+### 其他个人活动
+- 
+```
+
+#### 方案2: 数据统计式
+
+在 front matter 中添加结构化数据：
+
+```markdown
+---
+date: 2025-06-20
+day: Friday  
+week: [[2025-W25]]
+tags: [daily]
+# 健身数据
+workout_completed: true
+workout_type: "跑步"
+workout_duration: 30
+workout_intensity: "中等"
+sleep_hours: 8
+energy_level: 4
+---
+```
+
+#### 方案3: 详细记录式
+
+使用可折叠的详细记录：
+
+```markdown
+<details>
+<summary>🏋️ 健身与健康记录</summary>
+
+### 今日运动
+- [ ] **类型**：□跑步 □力量 □瑜伽 □游泳 □其他：___
+- **时长**：___分钟 | **强度**：□轻松 □中等 □高强度
+- **地点**：□家里 □健身房 □户外
+
+### 身体状态
+- **精力水平**：😴😐😊😁🔥 (1-5)
+- **睡眠质量**：___小时 | 质量评分：___/10
+- **整体感受**：
+
+</details>
+```
+
+#### 健身统计查询
+
+使用 Dataview 进行数据分析：
+
+```javascript
+// 本月运动频率统计
+TABLE workout_type as "运动类型", 
+      workout_duration as "时长(分钟)",
+      workout_intensity as "强度"
+FROM "10-Daily"
+WHERE workout_completed = true 
+  AND date >= date(today) - dur(30 days)
+SORT date DESC
+
+// 运动类型分布
+TABLE WITHOUT ID
+  workout_type as "运动类型",
+  length(rows) as "次数",
+  sum(rows.workout_duration) as "总时长(分钟)"
+FROM "10-Daily"
+WHERE workout_completed = true
+GROUP BY workout_type
+SORT 次数 DESC
+```
+
+#### 使用健身模板变体
+
+我们提供了专门的健身版每日模板：
+
+1. 复制 `90-Meta/Templates/daily-template.md` 为 `daily-template-fitness.md`
+2. 根据上述方案选择合适的健身记录格式
+3. 在 Templater 设置中配置使用新模板
+
+#### 健身目标追踪
+
+在 `00-Dashboard/` 创建健身仪表盘：
+
+```markdown
+# 🏋️ 健身仪表盘
+
+## 本月统计
+```dataview
+TABLE WITHOUT ID
+  "🏃‍♂️ 运动天数" as "指标",
+  length(filter(rows, (r) => r.workout_completed = true)) as "数值"
+FROM "10-Daily"
+WHERE date >= date(today) - dur(30 days)
+```
+
+## 运动类型分布
+```dataview
+TABLE WITHOUT ID workout_type as "类型", length(rows) as "次数"
+FROM "10-Daily" 
+WHERE workout_completed = true AND date >= date(today) - dur(30 days)
+GROUP BY workout_type
+```
 ```
 
 ## 📚 进阶使用
