@@ -1,6 +1,23 @@
 <%*
 const projectName = await tp.system.prompt("项目名称");
-const fileName = `Project-${projectName}`;
+if (!projectName || projectName.trim() === "") {
+    // 用户取消或输入为空，删除文件并退出
+    await tp.file.delete();
+    return;
+}
+const fileName = `Project-${projectName.trim()}`;
+// 检查文件是否已存在
+const existingFile = tp.file.find_tfile(fileName);
+if (existingFile) {
+    const overwrite = await tp.system.suggester(
+        ["覆盖现有文件", "取消创建"],
+        [true, false]
+    );
+    if (!overwrite) {
+        await tp.file.delete();
+        return;
+    }
+}
 await tp.file.rename(fileName);
 await tp.file.move(`20-Projects/${fileName}`);
 -%>

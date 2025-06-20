@@ -7,8 +7,8 @@ tags: [dashboard, home]
 ## 🚀 快速导航
 - [[00-Dashboard/Current-Projects|当前项目]]
 - [[00-Dashboard/Quick-Notes|快速记录]]
-- 今日笔记: [[10-Daily/{{date:YYYY-MM-DD}}]]
-- 本周总结: [[Weekly/{{date:YYYY-[W]ww}}]]
+- 今日笔记: `= "[[10-Daily/" + dateformat(date(today), "yyyy-MM-dd") + "]]"`
+- 本周总结: `= "[[Weekly/" + dateformat(date(today), "yyyy-'W'WW") + "]]"`
 
 ## 📊 项目状态
 ```dataview
@@ -19,6 +19,7 @@ TABLE
 FROM "20-Projects"
 WHERE status = "active"
 SORT priority DESC, start_date ASC
+LIMIT 10
 ```
 
 ## 📅 最近7天
@@ -29,6 +30,7 @@ TABLE WITHOUT ID
 FROM "10-Daily"
 WHERE date >= date(today) - dur(7 days)
 SORT file.name DESC
+LIMIT 7
 ```
 
 ## 🎯 待办事项
@@ -49,4 +51,4 @@ LIMIT 5
 ```
 
 ---
-*最后更新: {{date:YYYY-MM-DD HH:mm}}*
+*最后更新: `= dateformat(date(now), "yyyy-MM-dd HH:mm")`*

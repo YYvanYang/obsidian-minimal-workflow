@@ -3,6 +3,13 @@ const weekNum = tp.date.now("ww");
 const fileName = tp.date.now("YYYY-[W]ww");
 await tp.file.rename(fileName);
 await tp.file.move(`Weekly/${fileName}`);
+// 计算本周的起止日期
+const currentDate = tp.date.now("YYYY-MM-DD");
+const dayOfWeek = tp.date.now("d");
+const monday = tp.date.now("YYYY-MM-DD", -dayOfWeek + 1);
+const sunday = tp.date.now("YYYY-MM-DD", 7 - dayOfWeek);
+const mondayFormatted = tp.date.now("MM-DD", -dayOfWeek + 1);
+const sundayFormatted = tp.date.now("MM-DD", 7 - dayOfWeek);
 -%>
 
 ---
@@ -11,7 +18,7 @@ week: <% tp.date.now("YYYY-[W]ww") %>
 tags: [weekly]
 ---
 
-# 第<% weekNum %>周总结 (<% tp.date.weekday("MM-DD", 1) %> - <% tp.date.weekday("MM-DD", 7) %>)
+# 第<% weekNum %>周总结 (<% mondayFormatted %> - <% sundayFormatted %>)
 
 ## 📊 本周概览
 
@@ -19,8 +26,8 @@ tags: [weekly]
 ```dataview
 LIST
 FROM "10-Daily"
-WHERE date >= date(<% tp.date.weekday("YYYY-MM-DD", 1) %>) 
-AND date <= date(<% tp.date.weekday("YYYY-MM-DD", 7) %>)
+WHERE date >= date("<% monday %>") 
+AND date <= date("<% sunday %>")
 AND contains(file.content, "完成")
 LIMIT 10
 ```
@@ -29,8 +36,8 @@ LIMIT 10
 ```dataview
 LIST  
 FROM "10-Daily"
-WHERE date >= date(<% tp.date.weekday("YYYY-MM-DD", 1) %>)
-AND date <= date(<% tp.date.weekday("YYYY-MM-DD", 7) %>)
+WHERE date >= date("<% monday %>")
+AND date <= date("<% sunday %>")
 AND contains(file.content, "问题")
 LIMIT 5
 ```
@@ -39,8 +46,8 @@ LIMIT 5
 ```dataview
 LIST
 FROM "10-Daily"
-WHERE date >= date(<% tp.date.weekday("YYYY-MM-DD", 1) %>)
-AND date <= date(<% tp.date.weekday("YYYY-MM-DD", 7) %>)
+WHERE date >= date("<% monday %>")
+AND date <= date("<% sunday %>")
 AND contains(file.content, "学习")
 LIMIT 5
 ```
@@ -50,6 +57,7 @@ LIMIT 5
 TABLE status as 状态, priority as 优先级
 FROM "20-Projects"
 WHERE status = "active"
+LIMIT 10
 ```
 
 ## 🎯 下周计划
@@ -65,4 +73,4 @@ WHERE status = "active"
 - 
 
 ### 下周重点
-- 
+-

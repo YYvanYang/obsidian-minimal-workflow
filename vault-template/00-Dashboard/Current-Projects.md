@@ -14,6 +14,7 @@ TABLE
 FROM "20-Projects"
 WHERE status = "active"
 SORT priority DESC, start_date ASC
+LIMIT 20
 ```
 
 ## ⏸️ 暂停项目
@@ -25,6 +26,7 @@ TABLE
 FROM "20-Projects"
 WHERE status = "paused"
 SORT start_date DESC
+LIMIT 10
 ```
 
 ## ✅ 最近完成
@@ -35,7 +37,7 @@ TABLE
   start_date as 开始日期
 FROM "20-Projects"
 WHERE status = "completed"
-SORT start_date DESC
+SORT file.mtime DESC
 LIMIT 5
 ```
 
@@ -44,18 +46,20 @@ LIMIT 5
 TASK
 FROM "20-Projects"
 WHERE status = "active" AND !completed
-LIMIT 15
+GROUP BY file.link
+LIMIT 20
 ```
 
 ## 📊 项目统计
 ```dataview
-TABLE 
-  length(filter(rows, (r) => r.status = "active")) as 活跃项目,
-  length(filter(rows, (r) => r.status = "paused")) as 暂停项目,
-  length(filter(rows, (r) => r.status = "completed")) as 已完成项目
+TABLE WITHOUT ID
+  length(filter(rows.file.path, (p) => meta(p).frontmatter.status = "active")) as "🟢 活跃",
+  length(filter(rows.file.path, (p) => meta(p).frontmatter.status = "paused")) as "🟡 暂停",
+  length(filter(rows.file.path, (p) => meta(p).frontmatter.status = "completed")) as "✅ 完成"
 FROM "20-Projects"
-GROUP BY "统计"
+WHERE file.name != "Project-Template"
+GROUP BY true
 ```
 
 ---
-*更新时间: {{date:YYYY-MM-DD HH:mm}}*
+*更新时间: `= dateformat(date(now), "yyyy-MM-dd HH:mm")`*
