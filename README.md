@@ -143,12 +143,20 @@ chmod +x scripts/setup.sh
 ```bash
 # 创建今日笔记
 claude /daily-note
+# 创建带健身记录的今日笔记
+claude /daily-note --template fitness
 
 # 生成周报
 claude /weekly-report  
 
 # 项目状态分析
 claude /project-summary "项目名称"
+
+# 健身数据分析
+claude /fitness-analysis
+
+# 学习进度分析
+claude /learning-progress
 
 # 知识图谱优化
 claude /knowledge-connect
@@ -159,8 +167,11 @@ claude /vault-cleanup
 
 ### AI 辅助特性
 
+- **智能笔记创建**: 支持标准和健身版每日笔记模板选择
 - **智能周报生成**: 自动分析一周的笔记，提取关键成果和洞察
 - **项目进度跟踪**: 基于日常记录分析项目状态和风险
+- **健身数据洞察**: 分析运动数据，提供个性化健康建议
+- **学习进度评估**: 追踪知识获取，优化学习策略和效果
 - **知识连接发现**: 识别相关知识点，建议创建双向链接
 - **系统健康检查**: 发现孤立文件、重复内容、优化建议
 
