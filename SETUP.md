@@ -14,15 +14,17 @@ chmod +x scripts/setup.sh
 ./scripts/setup.sh
 ```
 
-**设置选项说明:**
-- **选项1**: 在当前目录创建 Vault (会检查目录是否为空)
-- **选项2**: 指定现有目录路径 (支持 ~ 路径)
-- **选项3**: 创建新目录 (可指定父目录位置)
+**设置流程:**
+1. **输入 Vault 名称** - 脚本会自动转换为合适的目录名
+2. **选择创建位置** - 提供三种选项：
+   - **当前目录** - 在当前目录创建以 Vault 名称命名的文件夹
+   - **指定目录** - 在自定义父目录中创建 Vault 文件夹
+   - **现有目录** - 使用现有的空目录作为 Vault
 
-**推荐创建位置:**
-- `~/Documents/MyVault` - 文档目录下
-- `~/Obsidian/WorkVault` - 专门的Obsidian目录
-- `~/Desktop/Knowledge` - 桌面快速访问
+**示例创建路径:**
+- 当前目录: `./My-Knowledge-Base/`
+- 指定目录: `~/Documents/My-Knowledge-Base/`
+- 现有目录: `/path/to/existing/empty/folder/`
 
 ### 方法2: 手动设置
 
