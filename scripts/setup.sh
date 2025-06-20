@@ -37,22 +37,12 @@ init_config() {
     
     # 检查是否已有配置
     if [ -f "$CONFIG_FILE" ]; then
-        echo -e "${GREEN}✅ 发现现有配置文件${NC}"
-        # 读取现有配置
-        VAULT_NAME=$(grep -o '"vault_name"[[:space:]]*:[[:space:]]*"[^"]*"' "$CONFIG_FILE" | sed 's/.*"\([^"]*\)"$/\1/')
-    else
-        # 请求用户输入 Vault 名称
-        while true; do
-            read -p "请输入 Vault 名称 (默认: My Knowledge Base): " VAULT_NAME
-            VAULT_NAME=${VAULT_NAME:-"My Knowledge Base"}
-            if validate_vault_name "$VAULT_NAME"; then
-                break
-            fi
-        done
-        
-        # 创建配置目录和文件
-        mkdir -p "$(dirname "$CONFIG_FILE")"
-        cat > "$CONFIG_FILE" << EOF
+        echo -e "${GREEN}✅ 发现现有配置文件，将更新配置${NC}"
+    fi
+    
+    # 创建配置目录和文件（VAULT_NAME已在外部获取）
+    mkdir -p "$(dirname "$CONFIG_FILE")"
+    cat > "$CONFIG_FILE" << EOF
 {
   "vault_name": "$VAULT_NAME",
   "default_language": "zh-CN",
@@ -62,39 +52,53 @@ init_config() {
   "last_updated": "$(date -I)"
 }
 EOF
-        echo -e "${GREEN}✅ 配置文件已创建${NC}"
-    fi
+    echo -e "${GREEN}✅ 配置文件已创建${NC}"
 }
 
 
 
-# 函数：选择或创建目标目录
+# 函数：选择或创建目标目录 (遵循业界最佳实践)
 choose_vault_directory() {
-    echo -e "${BLUE}📁 请选择 Vault 的创建方式：${NC}"
-    echo "1) 在当前目录创建 ($(pwd))"
-    echo "2) 选择其他目录"
-    echo "3) 创建新目录"
+    # 将Vault名称转换为适合目录名的格式
+    local vault_name_for_dir
+    if [ -n "$VAULT_NAME" ]; then
+        vault_name_for_dir=$(echo "$VAULT_NAME" | sed 's/[^a-zA-Z0-9\-]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$//g')
+        if [ -z "$vault_name_for_dir" ]; then
+            vault_name_for_dir="My-Vault"
+        fi
+    else
+        vault_name_for_dir="My-Vault"
+    fi
+    
     echo ""
-    read -p "请输入选择 (1-3): " choice
+    echo -e "${BLUE}📁 选择 Vault 创建位置：${NC}"
+    echo "1) 当前目录   ($(pwd)/$vault_name_for_dir)"
+    echo "2) 指定目录   (自定义父目录)"
+    echo "3) 现有目录   (使用现有空目录)"
+    echo ""
+    read -p "请选择 (1-3): " choice
     
     case $choice in
         1)
-            VAULT_DIR="$(pwd)"
-            if [ "$(ls -A "$VAULT_DIR" 2>/dev/null)" ]; then
-                echo ""
-                echo -e "${YELLOW}⚠️  当前目录不为空，建议使用空目录创建 Vault${NC}"
-                echo "目录内容:"
-                ls -la "$VAULT_DIR" | head -10
-                echo ""
-                read -p "是否继续在此目录创建？(y/N): " response
-                if [[ ! "$response" =~ ^[yY]$ ]]; then
-                    echo -e "${RED}❌ 安装已取消${NC}"
-                    exit 1
-                fi
-            fi
+            VAULT_DIR="$(pwd)/$vault_name_for_dir"
             ;;
         2)
-            read -p "请输入目标目录路径: " target_dir
+            read -p "请输入父目录路径 (默认: $HOME): " parent_dir
+            parent_dir="${parent_dir:-$HOME}"
+            parent_dir="${parent_dir/#\~/$HOME}"
+            
+            # 获取绝对路径
+            parent_dir="$(realpath "$parent_dir" 2>/dev/null || echo "$parent_dir")"
+            
+            if [ ! -d "$parent_dir" ]; then
+                echo -e "${RED}❌ 父目录不存在: $parent_dir${NC}"
+                exit 1
+            fi
+            
+            VAULT_DIR="$parent_dir/$vault_name_for_dir"
+            ;;
+        3)
+            read -p "请输入目标目录的完整路径: " target_dir
             if [ -z "$target_dir" ]; then
                 echo -e "${RED}❌ 目录路径不能为空${NC}"
                 exit 1
@@ -118,53 +122,44 @@ choose_vault_directory() {
             fi
             
             VAULT_DIR="$target_dir"
-            if [ "$(ls -A "$VAULT_DIR" 2>/dev/null)" ]; then
-                echo ""
-                echo -e "${YELLOW}⚠️  目录不为空: $VAULT_DIR${NC}"
-                read -p "是否继续？(y/N): " response
-                if [[ ! "$response" =~ ^[yY]$ ]]; then
-                    echo -e "${RED}❌ 安装已取消${NC}"
-                    exit 1
-                fi
-            fi
-            ;;
-        3)
-            read -p "请输入新目录名称: " dir_name
-            if [ -z "$dir_name" ]; then
-                echo -e "${RED}❌ 目录名称不能为空${NC}"
-                exit 1
-            fi
-            
-            # 验证目录名称安全性
-            if [[ "$dir_name" =~ [/\\:*?\"\<\>\|] ]] || [[ "$dir_name" =~ \.\. ]]; then
-                echo -e "${RED}❌ 错误: 目录名称包含非法字符${NC}"
-                echo "目录名称不能包含: / \\ : * ? \" < > | 和 .. "
-                exit 1
-            fi
-            
-            read -p "请输入父目录路径 (默认: $HOME): " parent_dir
-            parent_dir="${parent_dir:-$HOME}"
-            parent_dir="${parent_dir/#\~/$HOME}"
-            
-            # 获取绝对路径
-            parent_dir="$(realpath "$parent_dir" 2>/dev/null || echo "$parent_dir")"
-            
-            VAULT_DIR="$parent_dir/$dir_name"
-            
-            if [ -d "$VAULT_DIR" ]; then
-                echo -e "${RED}❌ 目录已存在: $VAULT_DIR${NC}"
-                exit 1
-            fi
-            
-            mkdir -p "$VAULT_DIR"
-            echo -e "${GREEN}✅ 已创建目录: $VAULT_DIR${NC}"
             ;;
         *)
             echo -e "${RED}❌ 无效选择${NC}"
             exit 1
             ;;
     esac
+    
+    # 检查目录是否存在，如果不存在则创建
+    if [ ! -d "$VAULT_DIR" ]; then
+        mkdir -p "$VAULT_DIR"
+        echo -e "${GREEN}✅ 已创建目录: $VAULT_DIR${NC}"
+    else
+        # 检查目录是否为空
+        if [ "$(ls -A "$VAULT_DIR" 2>/dev/null)" ]; then
+            echo ""
+            echo -e "${YELLOW}⚠️  目录不为空: $VAULT_DIR${NC}"
+            echo "目录内容:"
+            ls -la "$VAULT_DIR" | head -5
+            echo ""
+            read -p "是否继续在此目录创建 Vault？(y/N): " response
+            if [[ ! "$response" =~ ^[yY]$ ]]; then
+                echo -e "${RED}❌ 安装已取消${NC}"
+                exit 1
+            fi
+        fi
+    fi
 }
+
+# 首先获取 Vault 名称（用于目录创建）
+echo ""
+echo -e "${BLUE}📝 配置 Vault 信息...${NC}"
+while true; do
+    read -p "请输入 Vault 名称 (默认: My Knowledge Base): " VAULT_NAME
+    VAULT_NAME=${VAULT_NAME:-"My Knowledge Base"}
+    if validate_vault_name "$VAULT_NAME"; then
+        break
+    fi
+done
 
 # 选择目标目录
 choose_vault_directory
@@ -176,7 +171,7 @@ echo ""
 # 切换到目标目录
 cd "$VAULT_DIR" || exit 1
 
-# 初始化配置
+# 初始化配置（此时已有VAULT_NAME）
 init_config
 
 # 1. 复制文件夹结构
