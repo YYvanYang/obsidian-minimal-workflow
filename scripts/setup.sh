@@ -13,7 +13,7 @@ NC='\033[0m' # No Color
 # 安全函数：验证 Vault 名称
 validate_vault_name() {
     local name="$1"
-    if [[ "$name" =~ [/\\:*?"<>|] ]]; then
+    if [[ "$name" =~ [/\\:*?\"\<\>\|] ]]; then
         echo -e "${RED}❌ 错误: Vault 名称包含非法字符${NC}"
         echo "Vault 名称不能包含: / \\ : * ? \" < > |"
         return 1
@@ -136,7 +136,7 @@ choose_vault_directory() {
             fi
             
             # 验证目录名称安全性
-            if [[ "$dir_name" =~ [/\\:*?"<>|] ]] || [[ "$dir_name" =~ \.\. ]]; then
+            if [[ "$dir_name" =~ [/\\:*?\"\<\>\|] ]] || [[ "$dir_name" =~ \.\. ]]; then
                 echo -e "${RED}❌ 错误: 目录名称包含非法字符${NC}"
                 echo "目录名称不能包含: / \\ : * ? \" < > | 和 .. "
                 exit 1
