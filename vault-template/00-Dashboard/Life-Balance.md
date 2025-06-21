@@ -100,10 +100,10 @@ LIMIT 1
 ### 🔥 连续记录
 ```dataview
 TABLE WITHOUT ID
-  max(date) - min(date) + dur(1 day) as "📅 连续天数",
+  choice(length(rows) > 0, max(date) - min(date) + dur(1 day), dur(0 days)) as "📅 连续天数",
   length(rows) as "📝 总记录数"
 FROM "10-Daily"
-WHERE date >= date(today) - dur(30 days)
+WHERE date >= date(today) - dur(30 days) AND date != null
 GROUP BY true
 ```
 

@@ -134,6 +134,26 @@ SORT priority DESC
 LIMIT 10  // Always limit results
 ```
 
+### Dataview Null Value Handling
+**Critical**: Always handle null values in date calculations to prevent "null + duration" errors:
+
+**❌ Wrong - Can cause null calculation errors:**
+```javascript
+max(date) - min(date) + dur(1 day) as "连续天数"
+```
+
+**✅ Correct - Handle null values safely:**
+```javascript
+choice(length(rows) > 0, max(date) - min(date) + dur(1 day), dur(0 days)) as "连续天数"
+FROM "10-Daily"
+WHERE date >= date(today) - dur(30 days) AND date != null
+```
+
+**Best practices for date calculations:**
+- Always use `WHERE date != null` to filter out null dates
+- Use `choice()` function to provide fallback values for empty results
+- Check `length(rows) > 0` before performing aggregation operations on dates
+
 ### Timestamp Best Practices
 **Critical**: Distinguish between "current time" vs "file modification time" in Dataview queries:
 
