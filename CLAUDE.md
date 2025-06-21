@@ -43,6 +43,8 @@ claude /weekly-report                 # Auto-generate weekly summary
 claude /project-summary "Project Name" # Project status analysis
 claude /fitness-analysis             # Health data insights
 claude /learning-progress            # Study progress evaluation
+claude /area-review                  # Life balance analysis across all areas
+claude /area-review --period 7d --focus health # Focused area analysis
 
 # System maintenance
 claude /vault-cleanup                # Optimize file organization

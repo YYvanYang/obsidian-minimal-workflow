@@ -158,6 +158,10 @@ claude /fitness-analysis
 # 学习进度分析
 claude /learning-progress
 
+# 生活平衡分析
+claude /area-review
+claude /area-review --period 7d --focus health
+
 # 知识图谱优化
 claude /knowledge-connect
 
@@ -172,6 +176,7 @@ claude /vault-cleanup
 - **项目进度跟踪**: 基于日常记录分析项目状态和风险
 - **健身数据洞察**: 分析运动数据，提供个性化健康建议
 - **学习进度评估**: 追踪知识获取，优化学习策略和效果
+- **生活平衡分析**: 分析工作、健康、学习各领域时间分配和平衡状况
 - **知识连接发现**: 识别相关知识点，建议创建双向链接
 - **系统健康检查**: 发现孤立文件、重复内容、优化建议
 

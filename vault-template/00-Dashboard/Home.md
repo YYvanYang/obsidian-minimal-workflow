@@ -7,6 +7,7 @@ tags: [dashboard, home]
 ## 🚀 快速导航
 - [[00-Dashboard/Current-Projects|当前项目]]
 - [[00-Dashboard/Quick-Notes|快速记录]]
+- [[00-Dashboard/Life-Balance|生活平衡]]
 - 今日笔记: `= "[[10-Daily/" + dateformat(date(today), "yyyy-MM-dd") + "]]"`
 - 本周总结: `= "[[Weekly/" + dateformat(date(today), "kkkk-'W'WW") + "]]"`
 
