@@ -16,7 +16,6 @@ date: <% dateVars.fileName %>
 day: <% dateVars.dayName %>
 week: [[<% dateVars.weekName %>]]
 tags: [daily]
-# 健身数据
 workout_completed: false
 workout_type: ""
 workout_duration: 0
