@@ -29,7 +29,7 @@ TABLE WITHOUT ID
   file.link as 日期,
   choice(contains(file.content, "完成"), "✅", "📝") as 状态
 FROM "10-Daily"
-WHERE date >= date(today) - dur(7 days)
+WHERE date != null AND date >= date(today) - dur(7 days)
 SORT file.name DESC
 LIMIT 7
 ```
@@ -46,7 +46,7 @@ LIMIT 10
 ```dataview
 LIST
 FROM "30-Knowledge"
-WHERE date >= date(today) - dur(14 days)
+WHERE date != null AND date >= date(today) - dur(14 days)
 SORT date DESC
 LIMIT 5
 ```

@@ -13,7 +13,7 @@ TABLE WITHOUT ID
   length(rows) as "📝 记录数",
   choice(length(filter(rows, (r) => contains(r.file.content, "<!-- area:work -->"))) > 0, "💼 有工作", "📝 常规") as "特征"
 FROM "10-Daily"
-WHERE date >= date(today) - dur(30 days)
+WHERE date != null AND date >= date(today) - dur(30 days)
   AND (contains(file.content, "工作") 
     OR contains(file.content, "项目")
     OR contains(file.content, "<!-- area:work -->"))
@@ -34,7 +34,7 @@ TABLE WITHOUT ID
     round(avg(filter(rows.sleep_hours, (x) => typeof(x) = "number" AND x > 0)), 1),
     "暂无") as "😴 平均睡眠(小时)"
 FROM "10-Daily"
-WHERE date >= date(today) - dur(30 days)
+WHERE date != null AND date >= date(today) - dur(30 days)
   AND (contains(file.content, "<!-- area:health -->") OR contains(file.content, "健身"))
 GROUP BY dateformat(date, "kkkk-'W'WW") as week
 SORT week DESC
@@ -45,7 +45,7 @@ LIMIT 4
 ```dataview
 LIST
 FROM "30-Knowledge/Learning"
-WHERE date >= date(today) - dur(30 days)
+WHERE date != null AND date >= date(today) - dur(30 days)
 SORT date DESC
 LIMIT 10
 ```
@@ -56,7 +56,7 @@ TABLE WITHOUT ID
   file.link as "📅 日期",
   choice(contains(file.content, "家庭") OR contains(file.content, "朋友"), "👥 社交", "🎯 个人") as "🏷️ 类型"
 FROM "10-Daily"
-WHERE date >= date(today) - dur(30 days)
+WHERE date != null AND date >= date(today) - dur(30 days)
   AND (contains(file.content, "<!-- area:personal -->") OR contains(file.content, "个人时间"))
 SORT date DESC
 LIMIT 8
@@ -70,7 +70,7 @@ TABLE WITHOUT ID
   "💼 工作" as "🏷️ 领域",
   length(filter(rows, (r) => contains(r.file.content, "<!-- area:work -->") OR contains(r.file.content, "工作"))) as "📊 活动天数"
 FROM "10-Daily"
-WHERE date >= date(today) - dur(7 days)
+WHERE date != null AND date >= date(today) - dur(7 days)
 GROUP BY true
 LIMIT 1
 ```
@@ -80,7 +80,7 @@ TABLE WITHOUT ID
   "🏃 健康" as "🏷️ 领域", 
   length(filter(rows, (r) => contains(r.file.content, "<!-- area:health -->") OR (r.workout_duration AND typeof(r.workout_duration) = "number" AND r.workout_duration > 0))) as "📊 活动天数"
 FROM "10-Daily"
-WHERE date >= date(today) - dur(7 days)
+WHERE date != null AND date >= date(today) - dur(7 days)
 GROUP BY true
 LIMIT 1
 ```
@@ -90,7 +90,7 @@ TABLE WITHOUT ID
   "🏠 个人" as "🏷️ 领域",
   length(filter(rows, (r) => contains(r.file.content, "<!-- area:personal -->") OR contains(r.file.content, "个人时间"))) as "📊 活动天数"
 FROM "10-Daily"
-WHERE date >= date(today) - dur(7 days)
+WHERE date != null AND date >= date(today) - dur(7 days)
 GROUP BY true
 LIMIT 1
 ```
@@ -100,10 +100,14 @@ LIMIT 1
 ### 🔥 连续记录
 ```dataview
 TABLE WITHOUT ID
-  choice(length(rows) > 0, max(date) - min(date) + dur(1 day), dur(0 days)) as "📅 连续天数",
+  choice(length(rows) > 0 AND min(rows.date) != null AND max(rows.date) != null, 
+    max(rows.date) - min(rows.date) + dur(1 day), 
+    dur(0 days)) as "📅 连续天数",
   length(rows) as "📝 总记录数"
 FROM "10-Daily"
-WHERE date >= date(today) - dur(30 days) AND date != null
+WHERE file.day = "Monday" OR file.day = "Tuesday" OR file.day = "Wednesday" OR file.day = "Thursday" OR file.day = "Friday" OR file.day = "Saturday" OR file.day = "Sunday"
+  AND date != null
+  AND date >= date(today) - dur(30 days)
 GROUP BY true
 ```
 

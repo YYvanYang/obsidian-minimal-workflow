@@ -144,15 +144,18 @@ max(date) - min(date) + dur(1 day) as "连续天数"
 
 **✅ Correct - Handle null values safely:**
 ```javascript
-choice(length(rows) > 0, max(date) - min(date) + dur(1 day), dur(0 days)) as "连续天数"
+choice(length(rows) > 0 AND min(rows.date) != null AND max(rows.date) != null, 
+  max(rows.date) - min(rows.date) + dur(1 day), 
+  dur(0 days)) as "连续天数"
 FROM "10-Daily"
-WHERE date >= date(today) - dur(30 days) AND date != null
+WHERE date != null AND date >= date(today) - dur(30 days)
 ```
 
 **Best practices for date calculations:**
-- Always use `WHERE date != null` to filter out null dates
+- Always use `WHERE date != null` at the beginning of date-based WHERE clauses
 - Use `choice()` function to provide fallback values for empty results
-- Check `length(rows) > 0` before performing aggregation operations on dates
+- Check both `length(rows) > 0` AND that aggregated values are not null before calculations
+- When using `min(date)` or `max(date)`, explicitly check they're not null: `min(rows.date) != null`
 
 ### Timestamp Best Practices
 **Critical**: Distinguish between "current time" vs "file modification time" in Dataview queries:
