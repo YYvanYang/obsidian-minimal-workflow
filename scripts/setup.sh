@@ -208,16 +208,16 @@ fi
 
 # 4. 创建本周周报
 echo -e "${BLUE}📊 创建本周周报...${NC}"
-WEEK=$(date +%Y-W%U)
+WEEK=$(date +%Y-W%V)
 if [ ! -f "Weekly/${WEEK}.md" ]; then
     cp "$PROJECT_DIR/examples/sample-weekly-report.md" "Weekly/${WEEK}.md"
     # 兼容 macOS 和 Linux 的 sed 命令
     if [[ "$OSTYPE" == "darwin"* ]]; then
         sed -i '' "s/2025-W25/${WEEK}/g" "Weekly/${WEEK}.md"
-        sed -i '' "s/第25周/第$(date +%U)周/g" "Weekly/${WEEK}.md"
+        sed -i '' "s/第25周/第$(date +%V)周/g" "Weekly/${WEEK}.md"
     else
         sed -i "s/2025-W25/${WEEK}/g" "Weekly/${WEEK}.md"
-        sed -i "s/第25周/第$(date +%U)周/g" "Weekly/${WEEK}.md"
+        sed -i "s/第25周/第$(date +%V)周/g" "Weekly/${WEEK}.md"
     fi
     echo -e "${GREEN}✅ 本周周报已创建: Weekly/${WEEK}.md${NC}"
 else

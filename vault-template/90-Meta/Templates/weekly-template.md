@@ -2,8 +2,8 @@
 // 缓存日期变量以提高性能
 const dayOfWeek = tp.date.now("d");
 const dateVars = {
-    weekNum: tp.date.now("ww"),
-    fileName: tp.date.now("YYYY-[W]ww"),
+    weekNum: tp.date.now("WW"),
+    fileName: tp.date.now("GGGG-[W]WW"),
     currentDate: tp.date.now("YYYY-MM-DD"),
     monday: tp.date.now("YYYY-MM-DD", -dayOfWeek + 1),
     sunday: tp.date.now("YYYY-MM-DD", 7 - dayOfWeek),

@@ -3,7 +3,7 @@
 const dateVars = {
     fileName: tp.date.now("YYYY-MM-DD"),
     dayName: tp.date.now("dddd"),
-    weekName: tp.date.now("YYYY-[W]ww"),
+    weekName: tp.date.now("GGGG-[W]WW"),
     shortDate: tp.date.now("MM-DD ddd")
 };
 
