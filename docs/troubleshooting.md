@@ -29,12 +29,42 @@
    - 重新打开并测试
 
 #### Q: 模板中的日期和变量没有正确替换
-**现象**: 看到 `<% tp.date.now() %>` 而不是实际日期
+**现象**: 看到 `<% tp.date.now() %>` 或 `<% tp.file.cursor() %>` 等语法原样输出而不是实际内容
 
 **解决方案**:
-1. 确认Templater插件已正确安装并启用
-2. 手动运行模板: `Cmd+P` → "Templater: Replace templates in the active file"
-3. 检查模板语法是否正确
+1. **确认Templater插件配置正确**（最常见原因）
+   - 打开 Settings → Community plugins → Templater
+   - 确认以下设置已开启：
+     - ✅ **Trigger Templater on new file creation**（必须开启）
+     - ✅ **Enable Folder Templates**（必须开启）
+   - 检查 **Template folder location** 是否设置为 `90-Meta/Templates`
+
+2. **检查文件创建方式**
+   - ❌ 错误：直接复制粘贴模板内容到新文件
+   - ❌ 错误：使用 Obsidian 核心的 Templates 插件
+   - ✅ 正确：在配置了 Folder Templates 的文件夹中创建新文件
+   - ✅ 正确：使用 `Templater: Create new note from template` 命令
+
+3. **手动触发模板处理**
+   - 如果文件已创建但显示原始语法：
+   - `Cmd+P` (Mac) 或 `Ctrl+P` (Windows/Linux)
+   - 输入并选择 "Templater: Replace templates in the active file"
+   - 模板语法会被立即处理
+
+4. **验证 Folder Templates 映射**
+   - 在 Templater 设置的 **Folder Templates** 部分，确保有以下映射：
+     ```
+     10-Daily → daily-template
+     20-Projects → project-template
+     30-Knowledge/Learning → knowledge-template
+     30-Knowledge/Research → knowledge-template
+     30-Knowledge/Reference → knowledge-template
+     Weekly → weekly-template
+     ```
+
+5. **重启 Obsidian**
+   - 有时配置更改需要重启才能生效
+   - 完全关闭 Obsidian，然后重新打开
 
 #### Q: 文件无法移动到指定文件夹
 **现象**: 新建的文件没有自动移动到目标文件夹

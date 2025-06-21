@@ -41,6 +41,8 @@ chmod +x scripts/setup.sh
 - ✅ 创建今日笔记和本周周报
 - ✅ 生成示例项目和知识笔记文件
 
+**重要提示**：安装完成后，请务必按照下方「配置 Templater 插件」部分进行设置，否则模板功能无法正常工作。
+
 ### 手动安装
 
 如果你更喜欢手动控制安装过程：
@@ -70,6 +72,29 @@ chmod +x scripts/setup.sh
    - **Dataview** (v0.5.56+) - 动态内容查询  
    - **Calendar** (v1.5.10+) - 日历视图
    - **Periodic Notes** (v0.0.17+) - 周期性笔记
+
+5. **配置 Templater 插件**（重要！）
+   
+   安装 Templater 后，必须进行以下配置，否则模板语法（如 `<% tp.file.cursor() %>`）会原样输出：
+   
+   在 Obsidian 设置 → Templater 中配置：
+   
+   - **Template folder location**: `90-Meta/Templates`
+   - **Trigger Templater on new file creation**: ✅ 必须开启
+   - **Automatic jump to cursor**: ✅ 建议开启
+   - **Enable Folder Templates**: ✅ 必须开启
+   
+   然后在 **Folder Templates** 部分添加以下映射：
+   ```
+   10-Daily → daily-template
+   20-Projects → project-template
+   30-Knowledge/Learning → knowledge-template
+   30-Knowledge/Research → knowledge-template
+   30-Knowledge/Reference → knowledge-template
+   Weekly → weekly-template
+   ```
+   
+   配置完成后，在对应文件夹创建新文件时，Templater 会自动应用相应模板并处理所有模板语法。
 
 ## 📁 文件夹结构
 
@@ -292,14 +317,37 @@ energy_level: 4
 <summary>🏋️ 健身与健康记录</summary>
 
 ### 今日运动
-- [ ] **类型**：□跑步 □力量 □瑜伽 □游泳 □其他：___
-- **时长**：___分钟 | **强度**：□轻松 □中等 □高强度
-- **地点**：□家里 □健身房 □户外
+**运动类型**（勾选一项）：
+- [ ] 跑步
+- [ ] 力量训练
+- [ ] 瑜伽
+- [ ] 游泳
+- [ ] 其他：___
+
+**运动详情**：
+- **时长**：___分钟
+- **强度**：
+  - [ ] 轻松
+  - [ ] 中等
+  - [ ] 高强度
+- **地点**：
+  - [ ] 家里
+  - [ ] 健身房
+  - [ ] 户外
 
 ### 身体状态
-- **精力水平**：😴😐😊😁🔥 (1-5)
-- **睡眠质量**：___小时 | 质量评分：___/10
-- **整体感受**：
+**精力水平**（选择一项）：
+- [ ] 😴 很疲惫 (1分)
+- [ ] 😐 一般 (2分)
+- [ ] 😊 不错 (3分)
+- [ ] 😁 很好 (4分)
+- [ ] 🔥 充满活力 (5分)
+
+**睡眠情况**：
+- **睡眠时长**：___小时
+- **睡眠质量**（1-10分）：___
+
+**整体感受**：
 
 </details>
 ```
