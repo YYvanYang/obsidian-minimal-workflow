@@ -27,11 +27,11 @@ LIMIT 4
 TABLE WITHOUT ID
   week as "📅 周",
   length(rows) as "📝 记录数",
-  choice(length(filter(rows, (r) => r.workout_duration AND r.workout_duration > 0)) > 0, 
-    sum(filter(rows.workout_duration, (x) => x AND x > 0)), 
+  choice(length(filter(rows, (r) => r.workout_duration AND typeof(r.workout_duration) = "number" AND r.workout_duration > 0)) > 0, 
+    sum(filter(rows.workout_duration, (x) => typeof(x) = "number" AND x > 0)), 
     "暂无") as "⏱️ 运动时长(分钟)",
-  choice(length(filter(rows, (r) => r.sleep_hours AND r.sleep_hours > 0)) > 0,
-    round(avg(filter(rows.sleep_hours, (x) => x AND x > 0)), 1),
+  choice(length(filter(rows, (r) => r.sleep_hours AND typeof(r.sleep_hours) = "number" AND r.sleep_hours > 0)) > 0,
+    round(avg(filter(rows.sleep_hours, (x) => typeof(x) = "number" AND x > 0)), 1),
     "暂无") as "😴 平均睡眠(小时)"
 FROM "10-Daily"
 WHERE date >= date(today) - dur(30 days)
@@ -78,7 +78,7 @@ LIMIT 1
 ```dataview
 TABLE WITHOUT ID
   "🏃 健康" as "🏷️ 领域", 
-  length(filter(rows, (r) => contains(r.file.content, "<!-- area:health -->") OR (r.workout_duration AND r.workout_duration > 0))) as "📊 活动天数"
+  length(filter(rows, (r) => contains(r.file.content, "<!-- area:health -->") OR (r.workout_duration AND typeof(r.workout_duration) = "number" AND r.workout_duration > 0))) as "📊 活动天数"
 FROM "10-Daily"
 WHERE date >= date(today) - dur(7 days)
 GROUP BY true

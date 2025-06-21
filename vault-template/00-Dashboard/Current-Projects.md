@@ -53,9 +53,9 @@ LIMIT 20
 ## 📊 项目统计
 ```dataview
 TABLE WITHOUT ID
-  length(filter(rows.file.path, (p) => meta(p).frontmatter.status = "active")) as "🟢 活跃",
-  length(filter(rows.file.path, (p) => meta(p).frontmatter.status = "paused")) as "🟡 暂停",
-  length(filter(rows.file.path, (p) => meta(p).frontmatter.status = "completed")) as "✅ 完成"
+  length(filter(rows, (r) => r.status = "active")) as "🟢 活跃",
+  length(filter(rows, (r) => r.status = "paused")) as "🟡 暂停",
+  length(filter(rows, (r) => r.status = "completed")) as "✅ 完成"
 FROM "20-Projects"
 WHERE file.name != "Project-Template"
 GROUP BY true
