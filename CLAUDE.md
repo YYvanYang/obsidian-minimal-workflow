@@ -134,6 +134,31 @@ SORT priority DESC
 LIMIT 10  // Always limit results
 ```
 
+### Timestamp Best Practices
+**Critical**: Distinguish between "current time" vs "file modification time" in Dataview queries:
+
+**❌ Wrong - Shows viewing time, not actual update time:**
+```javascript
+*最后更新: `= dateformat(date(now), "yyyy-MM-dd HH:mm")`*
+```
+
+**✅ Correct - Shows actual file modification time:**
+```javascript
+*最后更新: `= dateformat(this.file.mtime, "yyyy-MM-dd HH:mm")`*
+```
+
+**Use `date(now)` for:**
+- Real-time data displays
+- "Current status" indicators
+- Navigation helpers (today's note links)
+
+**Use `this.file.mtime` for:**
+- "Last updated" timestamps
+- "Last cleaned" timestamps  
+- Any historical record of when content was actually modified
+
+**Templates use `tp.date.now()` correctly** - this is for initial creation time, which should be current time.
+
 ### Cross-Platform Script Compatibility
 Scripts handle both macOS and Linux:
 ```bash

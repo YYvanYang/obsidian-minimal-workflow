@@ -134,4 +134,4 @@ claude /area-review --period 90d
 4. **个人**: 是否有足够的放松时间？
 
 ---
-*更新时间: `= dateformat(date(now), "yyyy-MM-dd HH:mm")`*
+*更新时间: `= dateformat(this.file.mtime, "yyyy-MM-dd HH:mm")`*

@@ -60,4 +60,4 @@ tags: [dashboard, quick-notes]
 > - 链接 → 30-Knowledge/Reference
 > - 其他 → 相应文件夹
 
-*最后清理: `= dateformat(date(now), "yyyy-MM-dd")`*
+*最后清理: `= dateformat(this.file.mtime, "yyyy-MM-dd")`*

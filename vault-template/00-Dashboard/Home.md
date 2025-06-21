@@ -52,4 +52,4 @@ LIMIT 5
 ```
 
 ---
-*最后更新: `= dateformat(date(now), "yyyy-MM-dd HH:mm")`*
+*最后更新: `= dateformat(this.file.mtime, "yyyy-MM-dd HH:mm")`*
