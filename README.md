@@ -358,22 +358,22 @@ energy: 4
 
 ```javascript
 // 本月运动频率统计
-TABLE workout_type as "运动类型", 
-      workout_duration as "时长(分钟)",
-      workout_intensity as "强度"
+TABLE type as "运动类型", 
+      duration as "时长(分钟)",
+      intensity as "强度"
 FROM "10-Daily"
-WHERE workout_completed = true 
+WHERE exercise = true 
   AND date >= date(today) - dur(30 days)
 SORT date DESC
 
 // 运动类型分布
 TABLE WITHOUT ID
-  workout_type as "运动类型",
+  type as "运动类型",
   length(rows) as "次数",
-  sum(rows.workout_duration) as "总时长(分钟)"
+  sum(rows.duration) as "总时长(分钟)"
 FROM "10-Daily"
-WHERE workout_completed = true
-GROUP BY workout_type
+WHERE exercise = true
+GROUP BY type
 SORT 次数 DESC
 ```
 
@@ -396,17 +396,17 @@ SORT 次数 DESC
 ```dataview
 TABLE WITHOUT ID
   "🏃‍♂️ 运动天数" as "指标",
-  length(filter(rows, (r) => r.workout_completed = true)) as "数值"
+  length(filter(rows, (r) => r.exercise = true)) as "数值"
 FROM "10-Daily"
 WHERE date >= date(today) - dur(30 days)
 ```
 
 ## 运动类型分布
 ```dataview
-TABLE WITHOUT ID workout_type as "类型", length(rows) as "次数"
+TABLE WITHOUT ID type as "类型", length(rows) as "次数"
 FROM "10-Daily" 
-WHERE workout_completed = true AND date >= date(today) - dur(30 days)
-GROUP BY workout_type
+WHERE exercise = true AND date >= date(today) - dur(30 days)
+GROUP BY type
 ```
 ```
 
