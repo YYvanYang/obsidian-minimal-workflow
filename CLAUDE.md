@@ -125,6 +125,32 @@ const dateVars = {
 };
 ```
 
+**Critical**: Templater `-%>` closing tag and YAML frontmatter formatting:
+- **Never add empty lines between `-%>` and `---`**
+- The `-%>` tag removes only ONE trailing newline
+- Extra empty lines will cause YAML frontmatter parsing to fail
+
+**❌ Wrong - Empty line prevents YAML parsing:**
+```markdown
+<%*
+// JavaScript code
+-%>
+
+---
+date: 2024-01-01
+---
+```
+
+**✅ Correct - No empty line ensures proper YAML parsing:**
+```markdown
+<%*
+// JavaScript code
+-%>
+---
+date: 2024-01-01
+---
+```
+
 ### Dataview Query Optimization
 All queries include LIMIT clauses for performance:
 ```javascript

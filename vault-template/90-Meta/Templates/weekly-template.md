@@ -14,7 +14,6 @@ const dateVars = {
 await tp.file.rename(dateVars.fileName);
 await tp.file.move(`Weekly/${dateVars.fileName}`);
 -%>
-
 ---
 date: <% dateVars.currentDate %>
 week: <% dateVars.fileName %>

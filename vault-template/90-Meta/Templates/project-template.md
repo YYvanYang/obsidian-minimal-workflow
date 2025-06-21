@@ -21,7 +21,6 @@ if (existingFile) {
 await tp.file.rename(fileName);
 await tp.file.move(`20-Projects/${fileName}`);
 -%>
-
 ---
 project: <% projectName %>
 status: active

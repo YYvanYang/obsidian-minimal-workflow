@@ -10,7 +10,6 @@ const dateVars = {
 await tp.file.rename(dateVars.fileName);
 await tp.file.move(`10-Daily/${dateVars.fileName}`);
 -%>
-
 ---
 date: <% dateVars.fileName %>
 day: <% dateVars.dayName %>
