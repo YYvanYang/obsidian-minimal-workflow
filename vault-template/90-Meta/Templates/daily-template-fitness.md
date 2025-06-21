@@ -15,12 +15,12 @@ date: <% dateVars.fileName %>
 day: <% dateVars.dayName %>
 week: [[<% dateVars.weekName %>]]
 tags: [daily]
-workout_completed: false
-workout_type: ""
-workout_duration: 0
-workout_intensity: ""
-sleep_hours: 8
-energy_level: 3
+exercise: false
+type: ""
+duration: 0
+intensity: ""
+sleep: 8
+energy: 3
 ---
 
 # <% dateVars.shortDate %>

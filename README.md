@@ -299,12 +299,12 @@ day: Friday
 week: [[2025-W25]]
 tags: [daily]
 # 健身数据
-workout_completed: true
-workout_type: "跑步"
-workout_duration: 30
-workout_intensity: "中等"
-sleep_hours: 8
-energy_level: 4
+exercise: true
+type: "跑步"
+duration: 30
+intensity: "中等"
+sleep: 8
+energy: 4
 ---
 ```
 
