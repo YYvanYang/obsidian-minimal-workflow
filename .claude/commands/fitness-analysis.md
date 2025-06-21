@@ -7,8 +7,8 @@ Parameters:
 Steps:
 1. Scan daily notes in `10-Daily/` for fitness data
 2. Extract workout metrics from front matter:
-   - workout_completed, workout_type, workout_duration
-   - workout_intensity, sleep_hours, energy_level
+   - exercise, type, duration
+   - intensity, sleep, energy
 3. Calculate fitness statistics:
    - Weekly/monthly workout frequency
    - Average workout duration by type
