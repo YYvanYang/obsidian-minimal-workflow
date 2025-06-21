@@ -208,6 +208,36 @@ WHERE date != null AND date >= date(today) - dur(30 days)
 
 **Templates use `tp.date.now()` correctly** - this is for initial creation time, which should be current time.
 
+### Checkbox Design Best Practices
+**Critical**: Use proper Obsidian checkbox syntax for all interactive elements:
+
+**❌ Wrong - Non-clickable symbols:**
+```markdown
+- [ ] **类型**：□跑步 □力量训练 □瑜伽
+```
+
+**✅ Correct - Clickable checkboxes:**
+```markdown
+**运动类型**（勾选一项）：
+- [ ] 跑步
+- [ ] 力量训练
+- [ ] 瑜伽
+```
+
+**Best practices for checkboxes:**
+- Always use `- [ ]` syntax for clickable checkboxes, never use `□` symbols
+- For single-choice options, add "(选择一项)" or "(勾选一项)" as hint text
+- Group related options with proper indentation for clarity
+- For multi-value selections (like emoji scales), convert to individual checkboxes with descriptions
+
+**Single selection pattern:**
+```markdown
+**精力水平**（选择一项）：
+- [ ] 😴 很疲惫 (1分)
+- [ ] 😐 一般 (2分)
+- [ ] 😊 不错 (3分)
+```
+
 ### Cross-Platform Script Compatibility
 Scripts handle both macOS and Linux:
 ```bash
