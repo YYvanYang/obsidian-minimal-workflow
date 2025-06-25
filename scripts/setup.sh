@@ -177,6 +177,8 @@ init_config
 # 1. 复制文件夹结构
 echo -e "${BLUE}📁 创建文件夹结构...${NC}"
 cp -r "$PROJECT_DIR/vault-template"/* ./
+# 确保 Personal 文件夹存在
+mkdir -p 30-Knowledge/Personal
 echo -e "${GREEN}✅ 文件夹结构已创建${NC}"
 
 # 2. 复制 Claude Code 命令

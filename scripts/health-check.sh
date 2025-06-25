@@ -53,7 +53,7 @@ report_issue() {
 
 # 1. 检查必需的文件夹结构
 echo -e "${BLUE}📁 检查文件夹结构...${NC}"
-REQUIRED_DIRS=("00-Dashboard" "10-Daily" "20-Projects" "30-Knowledge" "40-Archive" "90-Meta" "Weekly")
+REQUIRED_DIRS=("00-Dashboard" "10-Daily" "20-Projects" "30-Knowledge" "30-Knowledge/Learning" "30-Knowledge/Research" "30-Knowledge/Reference" "30-Knowledge/Personal" "40-Archive" "90-Meta" "Weekly")
 MISSING_DIRS=0
 
 for dir in "${REQUIRED_DIRS[@]}"; do
@@ -75,7 +75,7 @@ echo ""
 echo -e "${BLUE}📝 检查模板文件...${NC}"
 TEMPLATE_DIR="90-Meta/Templates"
 if [ -d "$TEMPLATE_DIR" ]; then
-    REQUIRED_TEMPLATES=("daily-template.md" "project-template.md" "knowledge-template.md" "weekly-template.md")
+    REQUIRED_TEMPLATES=("daily-template.md" "project-template.md" "knowledge-template.md" "weekly-template.md" "personal-template.md")
     for template in "${REQUIRED_TEMPLATES[@]}"; do
         if [ ! -f "$TEMPLATE_DIR/$template" ]; then
             report_issue "warning" "缺少模板文件: $template"

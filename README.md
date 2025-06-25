@@ -91,6 +91,7 @@ chmod +x scripts/setup.sh
    30-Knowledge/Learning → knowledge-template
    30-Knowledge/Research → knowledge-template
    30-Knowledge/Reference → knowledge-template
+   30-Knowledge/Personal → personal-template
    Weekly → weekly-template
    ```
    
@@ -116,7 +117,8 @@ chmod +x scripts/setup.sh
 ├── 📁 30-Knowledge/         # 📚 知识宝库
 │   ├── 📁 Learning/         # 学习笔记
 │   ├── 📁 Research/         # 深度研究
-│   └── 📁 Reference/        # 参考资料
+│   ├── 📁 Reference/        # 参考资料
+│   └── 📁 Personal/         # 个人文档
 │
 ├── 📁 40-Archive/           # 📦 归档区域
 ├── 📁 90-Meta/              # ⚙️ 系统配置
@@ -240,9 +242,10 @@ BACKUP_DIR=~/Backups RETENTION_DAYS=60 ./scripts/backup.sh
 
 - `daily-template.md` - 每日笔记结构
 - `daily-template-fitness.md` - 带健身记录的每日模板
-- `project-template.md` - 项目管理模板  
+- `project-template.md` - 项目管理模板（支持单文件/多文件/文件夹模式）
 - `knowledge-template.md` - 知识笔记模板
 - `weekly-template.md` - 周报生成模板
+- `personal-template.md` - 通用个人文档模板
 
 ### 添加自定义字段
 

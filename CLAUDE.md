@@ -60,7 +60,11 @@ The system follows a **template-driven architecture** with three main layers:
    - `00-Dashboard/` → Navigation and overview interfaces
    - `10-Daily/` → Time-based content (daily notes)
    - `20-Projects/` → Actionable work with deadlines
-   - `30-Knowledge/` → Learning, research, and reference materials
+   - `30-Knowledge/` → Learning, research, reference materials, and personal documents
+     - `Learning/` → Active learning notes and courses
+     - `Research/` → Deep research and exploration topics
+     - `Reference/` → Established knowledge and tools
+     - `Personal/` → Personal development documents (career plans, resumes, reviews)
    - `40-Archive/` → Completed or inactive content
 
 2. **System Layer**: Automation and configuration
@@ -110,8 +114,9 @@ Located in `90-Meta/Templates/`:
 - `daily-template.md` → Standard daily note structure
 - `daily-template-fitness.md` → Enhanced with health tracking
 - `weekly-template.md` → Weekly review and analysis
-- `project-template.md` → Project management structure
+- `project-template.md` → Enhanced project management with single/multi/folder modes
 - `knowledge-template.md` → Learning note organization
+- `personal-template.md` → Flexible personal document template
 
 ## Development Patterns
 
@@ -237,6 +242,35 @@ WHERE date != null AND date >= date(today) - dur(30 days)
 - [ ] 😐 一般 (2分)
 - [ ] 😊 不错 (3分)
 ```
+
+### File Organization Strategy
+
+The system supports three levels of project organization:
+
+1. **Single File Mode (90% of cases)**:
+   - Default for simple projects
+   - All content in one file
+   - Example: `Project-2024述职准备.md`
+
+2. **Multi-File Mode (8% of cases)**:
+   - Triggered when: single file > 2000 words, 3+ independent modules, or team collaboration needed
+   - Uses prefix naming: `ProjectName-01-Description.md`
+   - Main control file (MOC) links to sub-files
+
+3. **Folder Mode (2% of cases)**:
+   - For large projects with 8+ files
+   - Clear hierarchical structure
+   - Project duration > 3 months
+
+### Naming Conventions
+
+**Unified Prefixes**:
+- Projects: `Project-Description.md`
+- Learning: `Learning-Topic.md`
+- Reference: `Reference-Content.md`
+- Personal: `Personal-Type.md`
+- Templates: `Template-Purpose.md`
+- Archives: `Archive-Date-Description.md`
 
 ### Cross-Platform Script Compatibility
 Scripts handle both macOS and Linux:

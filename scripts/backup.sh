@@ -65,7 +65,7 @@ else
     echo -e "${GREEN}📦 执行完整备份...${NC}"
     
     # 备份核心内容
-    for dir in "00-Dashboard" "10-Daily" "20-Projects" "30-Knowledge" "90-Meta" "Weekly"; do
+    for dir in "00-Dashboard" "10-Daily" "20-Projects" "30-Knowledge" "40-Archive" "90-Meta" "Weekly"; do
         if [ -d "$dir" ]; then
             echo -e "  📁 备份 $dir/"
             cp -r "$dir" "${FULL_BACKUP_PATH}/"
@@ -110,7 +110,7 @@ $([ "$BACKUP_TYPE" == "incremental" ] && echo "- 最近7天修改的 Markdown �
 EOF
 
 # 添加各文件夹的文件数统计
-for dir in "00-Dashboard" "10-Daily" "20-Projects" "30-Knowledge" "90-Meta" "Weekly"; do
+for dir in "00-Dashboard" "10-Daily" "20-Projects" "30-Knowledge" "40-Archive" "90-Meta" "Weekly"; do
     if [ -d "${FULL_BACKUP_PATH}/$dir" ]; then
         count=$(find "${FULL_BACKUP_PATH}/$dir" -name "*.md" 2>/dev/null | wc -l)
         echo "- $dir: $count 个文件" >> "${FULL_BACKUP_PATH}/backup-info.txt"

@@ -93,6 +93,7 @@ chmod +x scripts/setup.sh
 | `30-Knowledge/Learning` | `knowledge-template` |
 | `30-Knowledge/Research` | `knowledge-template` |
 | `30-Knowledge/Reference` | `knowledge-template` |
+| `30-Knowledge/Personal` | `personal-template` |
 | `Weekly` | `weekly-template` |
 
 ### 3. Daily Notes 配置

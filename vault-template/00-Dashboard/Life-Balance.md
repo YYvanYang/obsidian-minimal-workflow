@@ -50,6 +50,17 @@ SORT date DESC
 LIMIT 10
 ```
 
+### 👤 个人文档
+```dataview
+TABLE WITHOUT ID
+  replace(file.name, "Personal-", "") as "📄 文档",
+  category as "🏷️ 类型",
+  status as "📊 状态"
+FROM "30-Knowledge/Personal"
+SORT file.mtime DESC
+LIMIT 10
+```
+
 ### 🏠 个人生活
 ```dataview
 TABLE WITHOUT ID
