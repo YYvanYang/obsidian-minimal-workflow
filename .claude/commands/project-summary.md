@@ -1,14 +1,70 @@
-Analyze and update project status:
+---
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
+  - Bash
+  - Edit
+  - Write
+description: Analyze and update project status with progress tracking and executive summaries
+---
 
-Parameters: $ARGUMENTS (project name or "all" for all projects)
+# Project Summary
 
-Steps:
-1. Find project file(s) in `20-Projects/` folder
-2. Scan related mentions in daily notes (`10-Daily/`)
-3. Extract recent progress, decisions, and blockers
-4. Calculate progress percentage based on completed tasks
-5. Identify risks and next actions
-6. Update project status and progress bar
-7. Generate executive summary
+Analyze and update project status
 
-Provide both high-level overview and detailed action items.
+## Usage with $ARGUMENTS
+
+```bash
+# Analyze specific project
+claude /project-summary "My Project Name"
+
+# Analyze all active projects
+claude /project-summary all
+
+# Generate detailed project report
+claude /project-summary "My Project Name" --detail high
+```
+
+## Parameters
+
+- **$ARGUMENTS**: Project name or "all" for all projects
+- `--detail`: Report detail level - `low`, `medium` (default), or `high`
+
+## Implementation
+
+### Step 1: Project Discovery
+Find project file(s) in `20-Projects/` folder
+
+### Step 2: Activity Scanning
+Scan related mentions in daily notes (`10-Daily/`)
+
+### Step 3: Progress Extraction
+Extract recent progress, decisions, and blockers
+
+### Step 4: Progress Calculation
+Calculate progress percentage based on completed tasks
+
+### Step 5: Risk Assessment
+Identify risks and next actions
+
+### Step 6: Status Update
+Update project status and progress bar
+
+### Step 7: Summary Generation
+Generate executive summary
+
+## Output
+
+- Project status overview
+- Progress percentage and visualization
+- Recent accomplishments list
+- Current blockers and risks
+- Next actions and priorities
+- Timeline assessment
+- Resource requirements
+- Executive summary
+
+## Notes
+
+Provide both high-level overview and detailed action items. The analysis considers project deadlines, dependencies, and resource allocation for comprehensive status reporting.

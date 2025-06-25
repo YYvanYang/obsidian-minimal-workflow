@@ -189,6 +189,12 @@ claude /learning-progress
 claude /area-review
 claude /area-review --period 7d --focus health
 
+# 个人职业发展
+claude /personal create --type review    # 创建述职报告
+claude /personal analyze                 # 职业发展分析
+claude /personal extract --focus skills  # 提取技能清单
+claude /personal prepare                 # 准备面试材料
+
 # 知识图谱优化
 claude /knowledge-connect
 
@@ -204,6 +210,7 @@ claude /vault-cleanup
 - **健身数据洞察**: 分析运动数据，提供个性化健康建议
 - **学习进度评估**: 追踪知识获取，优化学习策略和效果
 - **生活平衡分析**: 分析工作、健康、学习各领域时间分配和平衡状况
+- **个人职业管理**: 创建简历、述职报告，分析职业发展轨迹，提取关键成就
 - **知识连接发现**: 识别相关知识点，建议创建双向链接
 - **系统健康检查**: 发现孤立文件、重复内容、优化建议
 

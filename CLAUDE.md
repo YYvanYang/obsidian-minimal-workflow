@@ -46,6 +46,11 @@ claude /learning-progress            # Study progress evaluation
 claude /area-review                  # Life balance analysis across all areas
 claude /area-review --period 7d --focus health # Focused area analysis
 
+# Personal development
+claude /personal create --type review # Create performance review
+claude /personal analyze             # Career development analysis
+claude /personal extract --focus achievements # Extract key achievements
+
 # System maintenance
 claude /vault-cleanup                # Optimize file organization
 claude /knowledge-connect            # Enhance knowledge linking

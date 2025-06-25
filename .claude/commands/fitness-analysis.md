@@ -1,27 +1,72 @@
-Analyze fitness data and provide comprehensive health insights:
+---
+allowed-tools:
+  - Read
+  - Glob
+  - Grep
+  - Bash
+  - Edit
+  - Write
+description: Analyze fitness data and provide comprehensive health insights with trends and recommendations
+---
 
-Parameters:
-- Optional: `--period 30d` (default) or `7d`, `90d` for analysis timeframe
-- Optional: `--type summary` or `detailed` for report depth
+# Fitness Analysis
 
-Steps:
-1. Scan daily notes in `10-Daily/` for fitness data
-2. Extract workout metrics from front matter:
-   - exercise, type, duration
-   - intensity, sleep, energy
-3. Calculate fitness statistics:
-   - Weekly/monthly workout frequency
-   - Average workout duration by type
-   - Energy level correlations with exercise
-   - Sleep quality patterns
-4. Identify trends and insights:
-   - Most effective workout types for energy
-   - Consistency patterns and streaks
-   - Recovery and rest day analysis
-5. Generate actionable recommendations:
-   - Optimal workout schedule suggestions
-   - Goal adjustments based on progress
-   - Areas for improvement
-6. Create visual data summary for dashboard
+Analyze fitness data and provide comprehensive health insights
 
-Output includes: workout frequency charts, energy correlation analysis, goal progress, and personalized recommendations for sustainable fitness habits.
+## Usage with $ARGUMENTS
+
+```bash
+# Default 30-day fitness analysis
+claude /fitness-analysis
+
+# Weekly fitness summary
+claude /fitness-analysis --period 7d
+
+# Detailed 90-day fitness report
+claude /fitness-analysis --period 90d --type detailed
+```
+
+## Parameters
+
+- `--period`: Analysis timeframe - `30d` (default), `7d`, or `90d`
+- `--type`: Report depth - `summary` (default) or `detailed`
+
+## Implementation
+
+### Step 1: Data Collection
+Scan daily notes in `10-Daily/` for fitness data
+
+### Step 2: Metric Extraction
+Extract workout metrics from front matter:
+- exercise, type, duration
+- intensity, sleep, energy
+
+### Step 3: Statistical Analysis
+Calculate fitness statistics:
+- Weekly/monthly workout frequency
+- Average workout duration by type
+- Energy level correlations with exercise
+- Sleep quality patterns
+
+### Step 4: Trend Identification
+Identify trends and insights:
+- Most effective workout types for energy
+- Consistency patterns and streaks
+- Recovery and rest day analysis
+
+### Step 5: Recommendations
+Generate actionable recommendations:
+- Optimal workout schedule suggestions
+- Goal adjustments based on progress
+- Areas for improvement
+
+### Step 6: Visualization
+Create visual data summary for dashboard
+
+## Output
+
+- Workout frequency charts
+- Energy correlation analysis
+- Goal progress tracking
+- Personalized recommendations for sustainable fitness habits
+- Recovery patterns and insights
