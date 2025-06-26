@@ -1,25 +1,36 @@
 <%*
 // Simplified Personal Document Template
-// Get document title
-const title = await tp.system.prompt("请输入文档标题");
-if (!title || title.trim() === "") {
-    // User cancelled or entered empty title
+// Variables declared at top level for template-wide scope
+let title = "";
+let dateVars = {};
+
+try {
+    // Get document title
+    title = await tp.system.prompt("请输入文档标题");
+    if (!title || title.trim() === "") {
+        // User cancelled or entered empty title
+        await tp.file.delete();
+        return;
+    }
+
+    // Set filename with Personal prefix
+    const fileName = `Personal-${title.trim()}`;
+    await tp.file.rename(fileName);
+
+    // Date variables
+    dateVars = {
+        date: tp.date.now("YYYY-MM-DD"),
+        year: tp.date.now("YYYY"),
+        month: tp.date.now("MM"),
+        monthName: tp.date.now("MMMM"),
+        quarter: `Q${Math.ceil(parseInt(tp.date.now("MM")) / 3)}`
+    };
+} catch (error) {
+    console.error("Personal template error:", error);
+    new Notice("创建个人文档时出错: " + error.message);
     await tp.file.delete();
     return;
 }
-
-// Set filename with Personal prefix
-const fileName = `Personal-${title.trim()}`;
-await tp.file.rename(fileName);
-
-// Date variables
-const dateVars = {
-    date: tp.date.now("YYYY-MM-DD"),
-    year: tp.date.now("YYYY"),
-    month: tp.date.now("MM"),
-    monthName: tp.date.now("MMMM"),
-    quarter: `Q${Math.ceil(parseInt(tp.date.now("MM")) / 3)}`
-};
 -%>
 ---
 date: <% dateVars.date %>
