@@ -37,6 +37,7 @@ chmod +x scripts/setup.sh
 2. **复制文件结构**
    ```bash
    cp -r vault-template/* ./
+   cp -r vault-template/.obsidian ./  # 复制预设配置
    cp -r .claude ./
    ```
 
@@ -67,25 +68,28 @@ chmod +x scripts/setup.sh
 
 ## ⚙️ 插件配置
 
-### 1. Templater 配置
+### 🎯 自动配置说明
+运行 `setup.sh` 后，以下配置已自动完成：
+- ✅ **附件存储路径**设置为 `90-Meta/Attachments`
+- ✅ **Templater** 插件配置和文件夹模板映射
+- ✅ **Dataview** 中文界面设置
+- ✅ **Calendar** 和 **Periodic Notes** 的 ISO 8601 周数格式
+
+**您只需要：**
+1. 从社区商店安装插件
+2. 重启 Obsidian 即可使用
+
+### 1. Templater 配置（已自动完成）
 ```json
 {
-  "template_folder": "90-Meta/Templates",
+  "templates_folder": "90-Meta/Templates",
   "trigger_on_file_creation": true,
-  "enable_system_commands": true,
-  "script_folder": "90-Meta/Scripts"
+  "auto_jump_to_cursor": true,
+  "enable_folder_templates": true
 }
 ```
 
-**配置步骤:**
-1. 打开 Settings → Community plugins → Templater
-2. 设置 Template folder location: `90-Meta/Templates`
-3. 开启 "Trigger Templater on new file creation"
-4. 开启 "Enable System Commands"
-
-### 2. 文件夹模板映射
-在Templater设置中配置文件夹规则：
-
+### 2. 文件夹模板映射（已自动完成）
 | 文件夹 | 模板 |
 |--------|------|
 | `10-Daily` | `daily-template` |
@@ -96,26 +100,31 @@ chmod +x scripts/setup.sh
 | `30-Knowledge/Personal` | `personal-template` |
 | `Weekly` | `weekly-template` |
 
-### 3. Daily Notes 配置
+### 3. Daily Notes 配置（已自动完成）
 ```json
 {
   "format": "YYYY-MM-DD",
   "folder": "10-Daily",
-  "template": "90-Meta/Templates/daily-template.md"
+  "template": "90-Meta/Templates/daily-template"
 }
 ```
 
-### 4. Periodic Notes 配置
+### 4. Periodic Notes 配置（已自动完成）
 ```json
 {
   "weekly": {
     "enabled": true,
-    "format": "YYYY-[W]ww",
+    "format": "GGGG-[W]WW",
     "folder": "Weekly",
-    "template": "90-Meta/Templates/weekly-template.md"
+    "template": "90-Meta/Templates/weekly-template"
   }
 }
 ```
+
+### 5. 手动配置（如需调整）
+如果需要修改自动配置，可以在 Obsidian 设置中调整：
+- **Settings → Files & Links** - 修改附件存储路径
+- **Settings → Community plugins → 各插件** - 调整插件设置
 
 ## ⌨️ 推荐快捷键
 

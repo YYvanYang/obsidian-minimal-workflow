@@ -1,0 +1,32 @@
+{
+  "app:go-back": [
+    {
+      "modifiers": ["Alt"],
+      "key": "ArrowLeft"
+    }
+  ],
+  "app:go-forward": [
+    {
+      "modifiers": ["Alt"],
+      "key": "ArrowRight"
+    }
+  ],
+  "templater-obsidian:insert-templater": [
+    {
+      "modifiers": ["Mod"],
+      "key": "t"
+    }
+  ],
+  "daily-notes:goto-today": [
+    {
+      "modifiers": ["Mod", "Shift"],
+      "key": "d"
+    }
+  ],
+  "command-palette:open": [
+    {
+      "modifiers": ["Mod", "Shift"],
+      "key": "p"
+    }
+  ]
+}

@@ -176,9 +176,12 @@ init_config
 
 # 1. 复制文件夹结构
 echo -e "${BLUE}📁 创建文件夹结构...${NC}"
+# 复制所有文件，包括隐藏文件（如 .obsidian）
 cp -r "$PROJECT_DIR/vault-template"/* ./
-# 确保 Personal 文件夹存在
-mkdir -p 30-Knowledge/Personal
+# 单独复制隐藏文件和目录
+if [ -d "$PROJECT_DIR/vault-template/.obsidian" ]; then
+    cp -r "$PROJECT_DIR/vault-template/.obsidian" ./
+fi
 echo -e "${GREEN}✅ 文件夹结构已创建${NC}"
 
 # 2. 复制 Claude Code 命令
@@ -252,15 +255,25 @@ echo -e "${BLUE}📍 Vault 位置: $VAULT_DIR${NC}"
 echo ""
 echo -e "${BLUE}📚 接下来的步骤：${NC}"
 echo "1. 在 Obsidian 中打开以下文件夹作为 Vault: $VAULT_DIR"
-echo "2. 安装必需插件: Templater, Dataview, Calendar"
-echo "3. 配置 Templater 插件指向 90-Meta/Templates 文件夹"
+echo "2. 安装必需的社区插件（设置 → 社区插件 → 浏览）："
+echo "   - Templater (模板系统)"
+echo "   - Dataview (数据查询)"
+echo "   - Calendar (日历视图)"
+echo "   - Periodic Notes (周期笔记)"
+echo "3. 重启 Obsidian 或重新加载 Vault"
 echo "4. 打开 00-Dashboard/Home.md 开始使用"
 echo ""
-echo -e "${BLUE}⚙️  插件配置提醒：${NC}"
-echo "- Templater: 设置模板文件夹为 '90-Meta/Templates'"
-echo "- Templater: 开启 'Trigger on new file creation'"
-echo "- Dataview: 确保插件已启用"
-echo "- Periodic Notes: 配置每日、周报等模板"
+echo -e "${GREEN}✅ 以下配置已自动完成：${NC}"
+echo "- 附件存储路径: 90-Meta/Attachments/"
+echo "- Templater 模板文件夹: 90-Meta/Templates/"
+echo "- Templater 文件夹模板映射已配置"
+echo "- Dataview 中文界面已配置"
+echo "- Calendar 周报格式: ISO 8601 (YYYY-WXX)"
+echo "- Periodic Notes 已配置每日和周报模板"
+echo ""
+echo -e "${YELLOW}⚠️  重要提醒：${NC}"
+echo "由于 Obsidian 的安全限制，插件文件需要手动从社区商店下载"
+echo "插件配置已预设好，安装插件后即可直接使用"
 echo ""
 echo -e "${BLUE}💡 建议按照渐进式采用计划：${NC}"
 echo "   第1周: 只使用每日笔记和主页仪表盘"

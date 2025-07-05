@@ -1,0 +1,32 @@
+{
+  "daily": {
+    "format": "YYYY-MM-DD",
+    "folder": "10-Daily",
+    "template": "90-Meta/Templates/daily-template",
+    "enabled": true
+  },
+  "weekly": {
+    "format": "GGGG-[W]WW",
+    "folder": "Weekly",
+    "template": "90-Meta/Templates/weekly-template",
+    "enabled": true
+  },
+  "monthly": {
+    "format": "",
+    "folder": "",
+    "template": "",
+    "enabled": false
+  },
+  "quarterly": {
+    "format": "",
+    "folder": "",
+    "template": "",
+    "enabled": false
+  },
+  "yearly": {
+    "format": "",
+    "folder": "",
+    "template": "",
+    "enabled": false
+  }
+}
