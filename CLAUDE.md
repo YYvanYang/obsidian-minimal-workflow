@@ -8,327 +8,120 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Key Purpose**: Transform individual productivity through structured knowledge management, automated workflows, and AI-enhanced insights.
 
+## Coding Standards
+
+### Templater Development
+- Use `<%* %>` blocks for JavaScript code with control structures (if, for, etc.)
+- Use `<% %>` tags only for simple expressions and variable output
+- Always provide content when creating files with `tp.file.create_new()` to avoid template recursion
+- Cache date variables in templates for performance
+- Never add empty lines between `-%>` and `---` in YAML frontmatter
+
+### File Naming Conventions
+- Projects: `Project-Description.md`
+- Learning: `Learning-Topic.md`
+- Reference: `Reference-Content.md`
+- Personal: `Personal-Type.md`
+- Multi-file projects: `Project-Name-01-Description.md`
+
+### Date Standards
+- Use ISO 8601 week numbering throughout the system
+- Bash scripts: `date +%Y-W%V`
+- Templater: `GGGG-[W]WW` format
+- Dataview: `kkkk-'W'WW` format
+
+### Dataview Best Practices
+- Always include LIMIT clauses in queries for performance
+- Handle null values in date calculations with `choice()` function
+- Check `length(rows) > 0` AND that aggregated values are not null
+- Use `this.file.mtime` for file modification timestamps, not `date(now)`
+
 ## Common Commands
 
-### Setup and Installation
+### Setup and Maintenance
 ```bash
-# Primary setup command - interactive vault creation
+# Initial setup
 ./scripts/setup.sh
 
-# Manual permissions setup if needed
-chmod +x scripts/*.sh
-```
-
-### Maintenance Commands
-```bash
-# Comprehensive system health check
+# Health check
 ./scripts/health-check.sh
 
 # Backup operations
 ./scripts/backup.sh full         # Complete backup
 ./scripts/backup.sh incremental  # Recent changes only
 
-# Environment customization
-BACKUP_DIR=~/Backups RETENTION_DAYS=60 ./scripts/backup.sh
+# Test commands
+npm run lint      # Check code quality
+npm run typecheck # Verify TypeScript types
 ```
 
-### Claude Code AI Commands
+### Claude Code Commands
 ```bash
-# Daily workflow automation
-claude /daily-note                    # Standard daily note
-claude /daily-note --template fitness # Fitness tracking variant
+# Daily workflow
+claude /daily-note                    # Create daily note
+claude /daily-note --template fitness # With fitness tracking
 
-# Analysis and insights
-claude /weekly-report                 # Auto-generate weekly summary
-claude /project-summary "Project Name" # Project status analysis
-claude /fitness-analysis             # Health data insights
-claude /learning-progress            # Study progress evaluation
-claude /area-review                  # Life balance analysis across all areas
-claude /area-review --period 7d --focus health # Focused area analysis
+# Analysis
+claude /weekly-report                 # Weekly summary
+claude /project-summary "Project Name" # Project status
+claude /fitness-analysis             # Health insights
+claude /learning-progress            # Learning evaluation
 
 # Personal development
-claude /personal create --type review # Create performance review
-claude /personal analyze             # Career development analysis
-claude /personal extract --focus achievements # Extract key achievements
+claude /personal create --type review # Performance review
+claude /personal analyze             # Career analysis
+claude /personal extract --focus achievements # Extract achievements
 
 # System maintenance
-claude /vault-cleanup                # Optimize file organization
-claude /knowledge-connect            # Enhance knowledge linking
+claude /vault-cleanup                # Optimize organization
+claude /knowledge-connect            # Enhance linking
 ```
 
-## Architecture Overview
+## Architecture Patterns
 
-### Core Structure Pattern
-The system follows a **template-driven architecture** with three main layers:
+### Directory Structure
+- `00-Dashboard/` → Navigation and overview interfaces
+- `10-Daily/` → Time-based content (daily notes)
+- `20-Projects/` → Actionable work with deadlines
+- `30-Knowledge/` → Learning and reference materials
+  - `Learning/` → Active learning notes
+  - `Research/` → Deep research topics
+  - `Reference/` → Established knowledge
+  - `Personal/` → Career documents
+- `40-Archive/` → Completed/inactive content
+- `90-Meta/Templates/` → Templater templates
 
-1. **Content Layer**: Structured folders following P.A.R.A. methodology
-   - `00-Dashboard/` → Navigation and overview interfaces
-   - `10-Daily/` → Time-based content (daily notes)
-   - `20-Projects/` → Actionable work with deadlines
-   - `30-Knowledge/` → Learning, research, reference materials, and personal documents
-     - `Learning/` → Active learning notes and courses
-     - `Research/` → Deep research and exploration topics
-     - `Reference/` → Established knowledge and tools
-     - `Personal/` → Personal development documents (career plans, resumes, reviews)
-   - `40-Archive/` → Completed or inactive content
+### Project Organization Modes
+1. **Single File Mode (90%)**: Simple projects in one file
+2. **Multi-File Mode (8%)**: Projects > 2000 words or 3+ modules
+3. **Folder Mode (2%)**: Large projects with 8+ files
 
-2. **System Layer**: Automation and configuration
-   - `90-Meta/Templates/` → Templater-based content generation
-   - `.claude/` → AI command definitions and permissions
-   - `.obsidian-workflow/` → Project-specific configuration
+### Critical Configuration Files
+- `.claude/settings.local.json` → Security permissions
+- `.obsidian-workflow/config.json` → Project settings
+- `90-Meta/Templates/` → Content generation templates
 
-3. **Maintenance Layer**: Scripts and tooling
-   - `scripts/` → Automation and health monitoring
-   - `examples/` → Sample content and demonstrations
+## Common Pitfalls and Solutions
 
-### Key Architectural Principles
+### Templater Syntax Errors
+**Problem**: "Unexpected token 'if'" error
+**Solution**: Use `<%* if (condition) { -%>` instead of `<% if (condition) { %>`
 
-**Template-First Design**: All content generation flows through Templater templates with JavaScript logic for:
-- Dynamic date handling with ISO 8601 week numbering (`%V`, `GGGG-[W]WW`, `kkkk-'W'WW`)
-- Automatic file naming and organization
-- Cross-platform compatibility (macOS/Linux)
+### Template Recursion
+**Problem**: Empty files trigger default template in infinite loop
+**Solution**: Always provide content: `tp.file.create_new("# Title", "filename")`
 
-**AI-Enhanced Workflows**: Claude Code commands provide:
-- Intelligent content analysis and generation
-- Progress tracking across projects and learning
-- System optimization recommendations
-- Health monitoring and maintenance automation
+### Path Nesting Issues
+**Problem**: Creating nested `20-Projects/20-Projects/` directories
+**Solution**: Use folder parameter: `tp.file.create_new(content, "name", false, "20-Projects")`
 
-**Progressive Disclosure**: System supports gradual adoption:
-- Week 1: Basic daily notes only
-- Week 2-3: Add project management
-- Week 4: Integrate knowledge management
-- Month 2: Full AI automation
+### Null Date Calculations
+**Problem**: Dataview errors with "null + duration"
+**Solution**: Check null values: `min(rows.date) != null AND max(rows.date) != null`
 
-## Critical Configuration Files
+## Cross-Platform Compatibility
 
-### `.claude/settings.local.json`
-Defines Claude Code permissions and security boundaries:
-- Whitelisted bash commands for safe automation
-- Allowed web domains for research
-- File system access restrictions
-
-### `.obsidian-workflow/config.json`  
-Project-specific settings:
-- Vault name and language preferences
-- Backup retention policies
-- Version tracking
-
-### Template System Structure
-Located in `90-Meta/Templates/`:
-- `daily-template.md` → Standard daily note structure
-- `daily-template-fitness.md` → Enhanced with health tracking
-- `weekly-template.md` → Weekly review and analysis
-- `project-template.md` → Enhanced project management with single/multi/folder modes
-- `knowledge-template.md` → Learning note organization
-- `personal-template.md` → Flexible personal document template
-
-## Development Patterns
-
-### Template Development
-Templates use Templater with cached JavaScript variables for performance:
-```javascript
-const dateVars = {
-    fileName: tp.date.now("YYYY-MM-DD"),
-    weekName: tp.date.now("GGGG-[W]WW"),  // ISO 8601 format
-    dayName: tp.date.now("dddd")
-};
-```
-
-**Critical**: Templater `-%>` closing tag and YAML frontmatter formatting:
-- **Never add empty lines between `-%>` and `---`**
-- The `-%>` tag removes only ONE trailing newline
-- Extra empty lines will cause YAML frontmatter parsing to fail
-
-**❌ Wrong - Empty line prevents YAML parsing:**
-```markdown
-<%*
-// JavaScript code
--%>
-
----
-date: 2024-01-01
----
-```
-
-**✅ Correct - No empty line ensures proper YAML parsing:**
-```markdown
-<%*
-// JavaScript code
--%>
----
-date: 2024-01-01
----
-```
-
-### Dataview Query Optimization
-All queries include LIMIT clauses for performance:
-```javascript
-FROM "20-Projects" 
-WHERE status = "active"
-SORT priority DESC
-LIMIT 10  // Always limit results
-```
-
-### Dataview Null Value Handling
-**Critical**: Always handle null values in date calculations to prevent "null + duration" errors:
-
-**❌ Wrong - Can cause null calculation errors:**
-```javascript
-max(date) - min(date) + dur(1 day) as "连续天数"
-```
-
-**✅ Correct - Handle null values safely:**
-```javascript
-choice(length(rows) > 0 AND min(rows.date) != null AND max(rows.date) != null, 
-  max(rows.date) - min(rows.date) + dur(1 day), 
-  dur(0 days)) as "连续天数"
-FROM "10-Daily"
-WHERE date != null AND date >= date(today) - dur(30 days)
-```
-
-**Best practices for date calculations:**
-- Always use `WHERE date != null` at the beginning of date-based WHERE clauses
-- Use `choice()` function to provide fallback values for empty results
-- Check both `length(rows) > 0` AND that aggregated values are not null before calculations
-- When using `min(date)` or `max(date)`, explicitly check they're not null: `min(rows.date) != null`
-
-### Timestamp Best Practices
-**Critical**: Distinguish between "current time" vs "file modification time" in Dataview queries:
-
-**❌ Wrong - Shows viewing time, not actual update time:**
-```javascript
-*最后更新: `= dateformat(date(now), "yyyy-MM-dd HH:mm")`*
-```
-
-**✅ Correct - Shows actual file modification time:**
-```javascript
-*最后更新: `= dateformat(this.file.mtime, "yyyy-MM-dd HH:mm")`*
-```
-
-**Use `date(now)` for:**
-- Real-time data displays
-- "Current status" indicators
-- Navigation helpers (today's note links)
-
-**Use `this.file.mtime` for:**
-- "Last updated" timestamps
-- "Last cleaned" timestamps  
-- Any historical record of when content was actually modified
-
-**Templates use `tp.date.now()` correctly** - this is for initial creation time, which should be current time.
-
-### Templater Syntax Best Practices
-**Critical**: Understand the difference between Templater tag types to avoid syntax errors:
-
-**Tag Types:**
-- `<% %>` - For simple expressions and variable output only
-- `<%* %>` - For JavaScript code blocks including control structures (if, for, etc.)
-- `-%>` - Removes the trailing newline after the tag
-
-**❌ Wrong - if statements in expression tags:**
-```javascript
-<% if (condition) { %>content<% } %>
-```
-
-**✅ Correct - if statements in execution blocks:**
-```javascript
-<%* if (condition) { -%>
-content
-<%* } -%>
-```
-
-**Best practices for conditional content:**
-1. **Simple expressions**: Use ternary operators or pre-computed variables
-   ```javascript
-   tags: [<% tagsString %>]  // Pre-computed in <%* %> block
-   ```
-
-2. **Complex logic**: Always use `<%* %>` blocks
-   ```javascript
-   <%* if (isMultiFile) { -%>
-   ## Multi-file content
-   <%* } else if (isFolder) { -%>
-   ## Folder content
-   <%* } -%>
-   ```
-
-3. **File creation**: Always provide content to avoid template recursion
-   ```javascript
-   // ❌ Wrong - empty content triggers default template
-   await tp.file.create_new("", "filename");
-   
-   // ✅ Correct - provide actual content
-   await tp.file.create_new("# Title\nContent", "filename");
-   ```
-
-4. **Path handling in tp.file.create_new**: Use the folder parameter
-   ```javascript
-   // ✅ Correct - explicit folder parameter
-   await tp.file.create_new(content, "filename", false, "20-Projects");
-   ```
-
-### Checkbox Design Best Practices
-**Critical**: Use proper Obsidian checkbox syntax for all interactive elements:
-
-**❌ Wrong - Non-clickable symbols:**
-```markdown
-- [ ] **类型**：□跑步 □力量训练 □瑜伽
-```
-
-**✅ Correct - Clickable checkboxes:**
-```markdown
-**运动类型**（勾选一项）：
-- [ ] 跑步
-- [ ] 力量训练
-- [ ] 瑜伽
-```
-
-**Best practices for checkboxes:**
-- Always use `- [ ]` syntax for clickable checkboxes, never use `□` symbols
-- For single-choice options, add "(选择一项)" or "(勾选一项)" as hint text
-- Group related options with proper indentation for clarity
-- For multi-value selections (like emoji scales), convert to individual checkboxes with descriptions
-
-**Single selection pattern:**
-```markdown
-**精力水平**（选择一项）：
-- [ ] 😴 很疲惫 (1分)
-- [ ] 😐 一般 (2分)
-- [ ] 😊 不错 (3分)
-```
-
-### File Organization Strategy
-
-The system supports three levels of project organization:
-
-1. **Single File Mode (90% of cases)**:
-   - Default for simple projects
-   - All content in one file
-   - Example: `Project-2024述职准备.md`
-
-2. **Multi-File Mode (8% of cases)**:
-   - Triggered when: single file > 2000 words, 3+ independent modules, or team collaboration needed
-   - Uses prefix naming: `ProjectName-01-Description.md`
-   - Main control file (MOC) links to sub-files
-
-3. **Folder Mode (2% of cases)**:
-   - For large projects with 8+ files
-   - Clear hierarchical structure
-   - Project duration > 3 months
-
-### Naming Conventions
-
-**Unified Prefixes**:
-- Projects: `Project-Description.md`
-- Learning: `Learning-Topic.md`
-- Reference: `Reference-Content.md`
-- Personal: `Personal-Type.md`
-- Templates: `Template-Purpose.md`
-- Archives: `Archive-Date-Description.md`
-
-### Cross-Platform Script Compatibility
-Scripts handle both macOS and Linux:
+Handle macOS and Linux differences:
 ```bash
 if [[ "$OSTYPE" == "darwin"* ]]; then
     sed -i '' "s/pattern/replacement/g" file
@@ -337,63 +130,21 @@ else
 fi
 ```
 
-## Date and Week Number Standards
-
-**Critical**: The system uses **ISO 8601 week numbering** throughout:
-- **Bash scripts**: `date +%Y-W%V` 
-- **Templater**: `GGGG-[W]WW` format
-- **Dataview**: `kkkk-'W'WW` format
-
-This ensures consistent week numbering across all systems (Monday-based weeks, week 1 contains January 4th).
-
-## Plugin Dependencies and Versions
-
-**Required Plugins**:
-- **Templater** (v1.16.0+): Core template system
-- **Dataview** (v0.5.56+): Dynamic content queries
-
-**Optional but Recommended**:
-- **Calendar** (v1.5.10+): Enhanced navigation
-- **Periodic Notes** (v0.0.17+): Automated note creation
-
-## Health Monitoring
-
-The system includes comprehensive health checks via `scripts/health-check.sh`:
-- File structure integrity validation
-- Broken link detection
-- Orphaned file identification  
-- Large file monitoring
-- Disk space verification
-- Performance optimization suggestions
-
-## Security Considerations
-
-- Claude Code operates within sandboxed permissions
-- No external dependencies for core functionality
-- Configurable backup retention prevents data loss
-- Script validation prevents path traversal attacks
-- Template injection protections in place
-
-## Customization Points
-
-1. **Templates**: Modify content generation in `90-Meta/Templates/`
-2. **AI Commands**: Add custom commands in `.claude/commands/`
-3. **Dashboards**: Customize Dataview queries in `00-Dashboard/`
-4. **Automation**: Extend maintenance scripts in `scripts/`
-
-## Performance Optimization
-
-- Templates use cached date variables to reduce computation
-- Dataview queries are optimized with appropriate LIMITs
-- Backup scripts check available disk space before operation
-- Health check script handles large file detection efficiently
-- All date operations use consistent ISO 8601 formatting
-
 ## Testing and Validation
 
 When making changes:
-1. Run `./scripts/health-check.sh` to validate system integrity
-2. Test template generation with various date scenarios
-3. Verify Claude Code commands work within permission boundaries
-4. Confirm cross-platform compatibility for script changes
-5. Validate that ISO 8601 week numbering remains consistent across all systems
+1. Run `./scripts/health-check.sh` for system integrity
+2. Test templates with various date scenarios
+3. Verify Claude Code commands work within permissions
+4. Confirm cross-platform compatibility
+5. Check ISO 8601 week numbering consistency
+
+## Plugin Requirements
+
+**Required**:
+- Templater (v1.16.0+) - Core template system
+- Dataview (v0.5.56+) - Dynamic content queries
+
+**Recommended**:
+- Calendar (v1.5.10+) - Enhanced navigation
+- Periodic Notes (v0.0.17+) - Automated note creation
