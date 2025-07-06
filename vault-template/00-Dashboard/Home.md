@@ -38,7 +38,8 @@ LIMIT 7
 ```dataview
 TASK
 FROM "10-Daily" OR "20-Projects"
-WHERE !completed
+WHERE !completed AND text != ""
+SORT file.mtime DESC
 LIMIT 10
 ```
 
