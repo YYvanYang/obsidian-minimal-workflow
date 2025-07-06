@@ -119,19 +119,6 @@ claude /knowledge-connect            # Enhance linking
 **Problem**: Dataview errors with "null + duration"
 **Solution**: Check null values: `min(rows.date) != null AND max(rows.date) != null`
 
-### Tasks Plugin Integration
-**Task Syntax**: Use emoji-based metadata for dates and properties
-- Due date: `📅 YYYY-MM-DD`
-- Scheduled: `⏳ YYYY-MM-DD`
-- Priority: `⏫` (high), `🔼` (medium), `🔽` (low)
-- Recurring: `🔁 every day/week/month`
-
-**Query Performance**: Always limit results in task queries
-```tasks
-not done
-limit 50
-```
-
 ## Cross-Platform Compatibility
 
 Handle macOS and Linux differences:
@@ -157,7 +144,6 @@ When making changes:
 **Required**:
 - Templater (v1.16.0+) - Core template system
 - Dataview (v0.5.56+) - Dynamic content queries
-- Obsidian Tasks (latest) - Advanced task management
 
 **Recommended**:
 - Calendar (v1.5.10+) - Enhanced navigation

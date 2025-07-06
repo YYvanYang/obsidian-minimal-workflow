@@ -5,18 +5,20 @@ tags: [dashboard, projects]
 # 📋 当前项目仪表盘
 
 ## 📌 今日待办
-```tasks
-not done
-due today
-group by priority
+```dataview
+TASK
+FROM "20-Projects" OR "10-Daily"
+WHERE !completed
+LIMIT 10
 ```
 
 ## ⚡ 本周重要任务
-```tasks
-not done
-(due after yesterday) AND (due before in 7 days)
-priority is high
-group by filename
+```dataview
+TASK
+FROM "20-Projects"
+WHERE !completed AND file.mtime >= date(now) - dur(7 days)
+GROUP BY file.link
+LIMIT 15
 ```
 
 ## 🚀 活跃项目
@@ -57,17 +59,20 @@ LIMIT 5
 ```
 
 ## 🎯 项目任务总览
-```tasks
-not done
-path includes 20-Projects
-group by filename
+```dataview
+TASK
+FROM "20-Projects"
+WHERE !completed
+GROUP BY file.link
+LIMIT 20
 ```
 
 ## 🔄 定期回顾任务
-```tasks
-not done
-is recurring
-path includes 20-Projects
+```dataview
+TASK
+FROM "20-Projects"
+WHERE !completed AND contains(text, "回顾")
+LIMIT 10
 ```
 
 ## 📊 项目统计
