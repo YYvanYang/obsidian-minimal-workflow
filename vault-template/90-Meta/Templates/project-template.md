@@ -50,24 +50,33 @@ if (finalOrgMode === "multi") {
     );
     
     if (createSubFiles) {
-        // Create basic structure files
-        await tp.file.create_new("", `20-Projects/${projectName}-01-需求分析`);
-        await tp.file.create_new("", `20-Projects/${projectName}-02-实施计划`);
-        await tp.file.create_new("", `20-Projects/${projectName}-99-过程记录`);
+        // Create basic structure files with basic content
+        const requirementContent = `# ${projectName} - 需求分析\n\n## 需求背景\n\n## 核心需求\n\n## 非功能需求\n\n## 约束条件\n`;
+        const planContent = `# ${projectName} - 实施计划\n\n## 实施阶段\n\n## 时间安排\n\n## 资源需求\n\n## 风险评估\n`;
+        const logContent = `# ${projectName} - 过程记录\n\n## ${tp.date.now("YYYY-MM-DD")}\n### 今日进展\n- \n\n### 问题记录\n- \n\n### 明日计划\n- \n`;
+        
+        // Create files in the same directory as the main file
+        await tp.file.create_new(requirementContent, `${fileName}-01-需求分析`, false, "20-Projects");
+        await tp.file.create_new(planContent, `${fileName}-02-实施计划`, false, "20-Projects");
+        await tp.file.create_new(logContent, `${fileName}-99-过程记录`, false, "20-Projects");
     }
     
     var isMultiFile = true;
 } else if (finalOrgMode === "folder") {
     // Create folder structure
     const folderPath = `20-Projects/${projectName}`;
-    await tp.file.create_new("", `${folderPath}/00-项目总览`);
-    await tp.file.rename("00-项目总览");
-    await tp.file.move(`${folderPath}/00-项目总览`);
     
-    // Create folder structure
-    await tp.file.create_new("", `${folderPath}/01-需求文档/README`);
-    await tp.file.create_new("", `${folderPath}/02-设计方案/README`);
-    await tp.file.create_new("", `${folderPath}/99-项目管理/会议记录`);
+    // Move current file as project overview
+    await tp.file.rename("00-项目总览");
+    await tp.file.move(folderPath + "/00-项目总览");
+    
+    // Create folder structure with basic content
+    const readmeContent = `# README\n\n本文件夹用于存放相关文档。\n`;
+    const meetingContent = `# 会议记录\n\n## ${tp.date.now("YYYY-MM-DD")}\n### 会议主题\n\n### 参会人员\n\n### 会议内容\n\n### 决议事项\n\n### 后续行动\n`;
+    
+    await tp.file.create_new(readmeContent, "README", false, folderPath + "/01-需求文档");
+    await tp.file.create_new(readmeContent, "README", false, folderPath + "/02-设计方案");
+    await tp.file.create_new(meetingContent, "会议记录", false, folderPath + "/99-项目管理");
     
     var isFolder = true;
 } else {
@@ -83,13 +92,35 @@ const dateVars = {
     date: tp.date.now("YYYY-MM-DD"),
     week: tp.date.now("GGGG-[W]WW")
 };
+
+// Generate tags array
+const tags = ["project"];
+if (isMultiFile) tags.push("multi-file");
+if (isFolder) tags.push("folder-project");
+const tagsString = tags.join(", ");
+
+// Generate project type string
+let projectType = "单文件项目";
+if (finalOrgMode === "multi") {
+    projectType = "多文件项目";
+} else if (finalOrgMode === "folder") {
+    projectType = "文件夹项目";
+}
+
+// Generate mode string for decision record
+let modeString = "单文件";
+if (finalOrgMode === "multi") {
+    modeString = "多文件";
+} else if (finalOrgMode === "folder") {
+    modeString = "文件夹";
+}
 -%>
 ---
 project: <% projectName %>
 status: active
 start_date: <% dateVars.date %>
 priority: medium
-tags: [project<% if (isMultiFile) { %>, multi-file<% } %><% if (isFolder) { %>, folder-project<% } %>]
+tags: [<% tagsString %>]
 organization: <% finalOrgMode %>
 ---
 
@@ -100,21 +131,21 @@ organization: <% finalOrgMode %>
 **截止时间**: 
 **负责人**: 
 **参与人员**: 
-**项目类型**: <% finalOrgMode === "single" ? "单文件项目" : finalOrgMode === "multi" ? "多文件项目" : "文件夹项目" %>
+**项目类型**: <% projectType %>
 
 ## 📊 当前状态
 进度: ▓▓▓░░░░░░░ 30%  
 状态: 🟡 进行中  
 阶段: 规划阶段
 
-<% if (isMultiFile) { %>
+<%* if (isMultiFile) { -%>
 ## 📚 项目文件
-1. **[[<% projectName %>-01-需求分析]]** - 需求文档 ⏳
-2. **[[<% projectName %>-02-实施计划]]** - 实施方案 ⏳
-3. **[[<% projectName %>-99-过程记录]]** - 工作日志 ⏳
+1. **[[<% fileName %>-01-需求分析]]** - 需求文档 ⏳
+2. **[[<% fileName %>-02-实施计划]]** - 实施方案 ⏳
+3. **[[<% fileName %>-99-过程记录]]** - 工作日志 ⏳
 
 > 💡 提示：这是一个多文件项目。随着项目发展，可以添加更多编号文件。
-<% } else if (isFolder) { %>
+<%* } else if (isFolder) { -%>
 ## 📁 项目结构
 ```
 📁 <% projectName %>/
@@ -126,7 +157,7 @@ organization: <% finalOrgMode %>
 ```
 
 > 💡 提示：这是一个文件夹项目。适合大型复杂项目的组织管理。
-<% } %>
+<%* } -%>
 
 ## ✅ 核心任务清单
 ### 本周任务 (<% dateVars.week %>)
@@ -161,14 +192,14 @@ organization: <% finalOrgMode %>
 ## 💡 关键决策记录
 | 日期 | 决策内容 | 决策人 | 影响 |
 |------|---------|--------|------|
-| <% dateVars.date %> | 采用<% finalOrgMode === "single" ? "单文件" : finalOrgMode === "multi" ? "多文件" : "文件夹" %>模式组织项目 | | 项目文件组织方式 |
+| <% dateVars.date %> | 采用<% modeString %>模式组织项目 | | 项目文件组织方式 |
 
 ## 🔗 相关资源
 ### 内部文档
 - [[Reference-项目管理最佳实践]]
-<% if (isMultiFile || isFolder) { %>
+<%* if (isMultiFile || isFolder) { -%>
 - [[Template-子文档模板]]
-<% } %>
+<%* } -%>
 
 ### 外部链接
 - 
@@ -186,7 +217,7 @@ SORT file.ctime DESC
 LIMIT 10
 ```
 
-<% if (finalOrgMode === "single") { %>
+<%* if (finalOrgMode === "single") { -%>
 ## 📄 详细内容
 <!-- 由于这是单文件项目，所有内容都在本文件中记录 -->
 
@@ -202,7 +233,7 @@ LIMIT 10
 ### 4. 预期成果
 
 
-<% } %>
+<%* } -%>
 
 ## 🔄 更新记录
 | 日期 | 更新内容 | 更新人 |
