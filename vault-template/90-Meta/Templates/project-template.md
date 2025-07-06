@@ -89,7 +89,7 @@ project: <% projectName %>
 status: active
 start_date: <% dateVars.date %>
 priority: medium
-tags: [project<% isMultiFile ? ", multi-file" : "" %><% isFolder ? ", folder-project" : "" %>]
+tags: [project<% if (isMultiFile) { %>, multi-file<% } %><% if (isFolder) { %>, folder-project<% } %>]
 organization: <% finalOrgMode %>
 ---
 
