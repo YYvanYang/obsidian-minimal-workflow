@@ -5,9 +5,10 @@ tags: [dashboard, tasks]
 # 📋 任务中心
 
 ## 🚀 快速操作
-- [[10-Daily/Daily-Note|➕ 新建任务]]
-- [[00-Dashboard/Weekly-Review|📊 周回顾]]
-- [[20-Projects/Project-Template|📁 项目模板]]
+- [[90-Meta/Templates/daily-template|📅 新建日记]]
+- [[90-Meta/Templates/project-template|📁 项目模板]]
+- [[00-Dashboard/Current-Projects|🎯 当前项目]]
+- 使用 `claude /weekly-report` 生成周报告
 
 ## 🎯 今日焦点
 ```tasks
