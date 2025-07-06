@@ -74,11 +74,9 @@ chmod +x scripts/setup.sh
    - **Calendar** (v1.5.10+) - 日历视图
    - **Periodic Notes** (v0.0.17+) - 周期性笔记
 
-5. **配置 Templater 插件**（重要！）
+5. **验证 Templater 配置**（重要！）
    
-   安装 Templater 后，必须进行以下配置，否则模板语法（如 `<% tp.file.cursor() %>`）会原样输出：
-   
-   在 Obsidian 设置 → Templater 中配置：
+   安装脚本已预置了所有配置，但如果模板语法（如 `<% tp.file.cursor() %>`）原样输出，请在 Obsidian 设置 → Templater 中确认：
    
    - **Template folder location**: `90-Meta/Templates`
    - **Trigger Templater on new file creation**: ✅ 必须开启
