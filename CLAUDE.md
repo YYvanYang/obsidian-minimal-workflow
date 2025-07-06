@@ -218,6 +218,56 @@ WHERE date != null AND date >= date(today) - dur(30 days)
 
 **Templates use `tp.date.now()` correctly** - this is for initial creation time, which should be current time.
 
+### Templater Syntax Best Practices
+**Critical**: Understand the difference between Templater tag types to avoid syntax errors:
+
+**Tag Types:**
+- `<% %>` - For simple expressions and variable output only
+- `<%* %>` - For JavaScript code blocks including control structures (if, for, etc.)
+- `-%>` - Removes the trailing newline after the tag
+
+**❌ Wrong - if statements in expression tags:**
+```javascript
+<% if (condition) { %>content<% } %>
+```
+
+**✅ Correct - if statements in execution blocks:**
+```javascript
+<%* if (condition) { -%>
+content
+<%* } -%>
+```
+
+**Best practices for conditional content:**
+1. **Simple expressions**: Use ternary operators or pre-computed variables
+   ```javascript
+   tags: [<% tagsString %>]  // Pre-computed in <%* %> block
+   ```
+
+2. **Complex logic**: Always use `<%* %>` blocks
+   ```javascript
+   <%* if (isMultiFile) { -%>
+   ## Multi-file content
+   <%* } else if (isFolder) { -%>
+   ## Folder content
+   <%* } -%>
+   ```
+
+3. **File creation**: Always provide content to avoid template recursion
+   ```javascript
+   // ❌ Wrong - empty content triggers default template
+   await tp.file.create_new("", "filename");
+   
+   // ✅ Correct - provide actual content
+   await tp.file.create_new("# Title\nContent", "filename");
+   ```
+
+4. **Path handling in tp.file.create_new**: Use the folder parameter
+   ```javascript
+   // ✅ Correct - explicit folder parameter
+   await tp.file.create_new(content, "filename", false, "20-Projects");
+   ```
+
 ### Checkbox Design Best Practices
 **Critical**: Use proper Obsidian checkbox syntax for all interactive elements:
 
