@@ -4,6 +4,21 @@ tags: [dashboard, projects]
 
 # 📋 当前项目仪表盘
 
+## 📌 今日待办
+```tasks
+not done
+due today
+group by priority
+```
+
+## ⚡ 本周重要任务
+```tasks
+not done
+(due after yesterday) AND (due before in 7 days)
+priority is high
+group by filename
+```
+
 ## 🚀 活跃项目
 ```dataview
 TABLE 
@@ -41,13 +56,18 @@ SORT file.mtime DESC
 LIMIT 5
 ```
 
-## 🎯 本周项目任务
-```dataview
-TASK
-FROM "20-Projects"
-WHERE status = "active" AND !completed
-GROUP BY file.link
-LIMIT 20
+## 🎯 项目任务总览
+```tasks
+not done
+path includes 20-Projects
+group by filename
+```
+
+## 🔄 定期回顾任务
+```tasks
+not done
+is recurring
+path includes 20-Projects
 ```
 
 ## 📊 项目统计

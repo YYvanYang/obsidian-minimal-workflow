@@ -70,6 +70,7 @@ chmod +x scripts/setup.sh
 4. **安装必需插件**
    - **Templater** (v1.16.0+) - 模板系统核心
    - **Dataview** (v0.5.56+) - 动态内容查询  
+   - **Obsidian Tasks** (最新版) - 高级任务管理
    - **Calendar** (v1.5.10+) - 日历视图
    - **Periodic Notes** (v0.0.17+) - 周期性笔记
 
@@ -140,15 +141,17 @@ chmod +x scripts/setup.sh
 1. **晨间规划** (2 分钟)
    - 按 `Cmd+T` 创建今日笔记
    - 设定 3 个今日重点任务
+   - 查看任务中心的今日待办
 
 2. **过程记录** (随时)
    - 记录完成的工作
    - 捕获遇到的问题
    - 记录学到的知识
+   - 完成任务后标记为已完成
 
 3. **晚间回顾** (3 分钟)
    - 总结今日成果
-   - 设置明日待办
+   - 设置明日待办（自动设置明日日期）
    - 写下一句话反思
 
 ### 📊 每周回顾
@@ -162,6 +165,40 @@ chmod +x scripts/setup.sh
 - 运行 `claude /vault-cleanup` 整理文件
 - 运行 `claude /knowledge-connect` 优化知识连接
 - 归档旧内容到 `40-Archive`
+
+## ✅ 任务管理系统
+
+集成 Obsidian Tasks 插件，实现强大的任务追踪功能：
+
+### 任务语法
+- **基础任务**: `- [ ] 任务描述`
+- **设置截止日期**: `- [ ] 任务 📅 2025-01-15`
+- **设置优先级**: `- [ ] 重要任务 ⏫` (高) / `🔼` (中) / `🔽` (低)
+- **循环任务**: `- [ ] 每日晨练 🔁 every day`
+- **计划日期**: `- [ ] 准备会议 ⏳ 2025-01-10`
+
+### 任务仪表盘
+- **任务中心** (`00-Dashboard/Task-Center.md`) - 集中查看所有任务
+- **项目任务** - 在项目仪表盘查看按项目分组的任务
+- **今日待办** - 快速查看今天需要完成的任务
+- **逾期任务** - 追踪超期未完成的任务
+
+### 常用查询
+```tasks
+# 今日任务
+not done
+due today
+
+# 本周高优先级
+not done
+priority is high
+due before in 7 days
+
+# 项目任务
+not done
+path includes 20-Projects
+group by filename
+```
 
 ## 🤖 Claude Code 集成
 
